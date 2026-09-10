@@ -3,875 +3,1363 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>RAP — Minecraft Services</title>
+<title>RAP</title>
 <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap');
 *{margin:0;padding:0;box-sizing:border-box;font-family:'Inter',sans-serif}
-:root{--p:#ef4444;--pd:#dc2626;--pg:rgba(239,68,68,.2);--bg:#0a0a0a;--c1:#141414;--c2:#1c1c1c;--ci:#0e0e0e;--t:#f5f5f5;--tm:#777;--td:#555;--del:#f59e0b;--taxi:#8b5cf6;--bank:#06b6d4;--ok:#10b981;--b:#222;--b2:#333}
+:root{--p:#ef4444;--bg:#0a0a0a;--c1:#141414;--ci:#0e0e0e;--t:#f5f5f5;--tm:#777;--del:#f59e0b;--taxi:#8b5cf6;--bank:#06b6d4;--ok:#10b981;--b:#222;--b2:#333}
 body{background:var(--bg);color:var(--t);min-height:100vh}
-@keyframes fadeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
-@keyframes scaleIn{from{opacity:0;transform:scale(.93)}to{opacity:1;transform:scale(1)}}
-@keyframes pulse{0%,100%{opacity:1}50%{opacity:.5}}
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+@keyframes scaleIn{from{opacity:0;transform:scale(.95)}to{opacity:1;transform:none}}
 @keyframes spin{to{transform:rotate(360deg)}}
-@keyframes grad{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
-@keyframes borderG{0%{border-color:#ef4444}33%{border-color:#f59e0b}66%{border-color:#8b5cf6}100%{border-color:#ef4444}}
-::-webkit-scrollbar{width:4px}::-webkit-scrollbar-thumb{background:#333;border-radius:2px}
+@keyframes grad{0%{background-position:0%}50%{background-position:100%}100%{background-position:0%}}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.5}}
 .h{display:none!important}
-.overlay{position:fixed;inset:0;background:rgba(0,0,0,.95);display:flex;align-items:center;justify-content:center;z-index:1000;backdrop-filter:blur(15px)}
-.auth{background:var(--c1);border-radius:18px;padding:26px;width:94%;max-width:380px;text-align:center;border:1px solid var(--b);max-height:94vh;overflow-y:auto;animation:scaleIn .4s}
-.auth h2{font-size:30px;font-weight:900;background:linear-gradient(135deg,#ef4444,#f59e0b,#8b5cf6);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-size:200%;animation:grad 3s infinite}
-.auth .sub{color:var(--tm);margin:4px 0 14px;font-size:11px}
-.mc-head{width:72px;height:72px;border-radius:12px;margin:0 auto 10px;background:var(--ci);display:flex;align-items:center;justify-content:center;font-size:34px;border:2px solid var(--b);animation:borderG 3s linear infinite;overflow:hidden}
-.mc-head img{width:56px;height:56px;image-rendering:pixelated;border-radius:6px}
-.atabs{display:flex;margin-bottom:14px;border-radius:8px;overflow:hidden;border:1px solid var(--b)}
-.atab{flex:1;padding:8px;background:var(--ci);color:var(--tm);font-weight:700;font-size:11px;cursor:pointer;border:none;transition:.3s}
+.overlay{position:fixed;inset:0;background:rgba(0,0,0,.95);display:flex;align-items:center;justify-content:center;z-index:1000}
+.auth{background:var(--c1);border-radius:16px;padding:24px;width:94%;max-width:380px;text-align:center;border:1px solid var(--b);max-height:92vh;overflow-y:auto;animation:scaleIn .3s}
+.auth h2{font-size:28px;font-weight:900;background:linear-gradient(135deg,#ef4444,#f59e0b,#8b5cf6);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-size:200%;animation:grad 3s infinite}
+.auth .sub{color:var(--tm);font-size:11px;margin:4px 0 12px}
+.mc-head{width:64px;height:64px;border-radius:12px;margin:0 auto 10px;background:var(--ci);display:flex;align-items:center;justify-content:center;font-size:28px;border:2px solid var(--b);overflow:hidden}
+.mc-head img{width:52px;height:52px;image-rendering:pixelated;border-radius:6px}
+.atabs{display:flex;margin-bottom:12px;border-radius:8px;overflow:hidden;border:1px solid var(--b)}
+.atab{flex:1;padding:8px;background:var(--ci);color:var(--tm);font-weight:700;font-size:11px;cursor:pointer;border:none}
 .atab.on{background:linear-gradient(135deg,#ef4444,#f59e0b);color:#fff}
-.af{display:none}.af.on{display:block;animation:fadeIn .3s}
-.ig{margin-bottom:10px;text-align:left}
-.ig label{display:block;font-size:9px;color:var(--tm);margin-bottom:2px;font-weight:700;text-transform:uppercase;letter-spacing:.5px}
-.ig input,.ig select,.ig textarea{width:100%;padding:9px 12px;border-radius:7px;border:1px solid var(--b);background:var(--ci);color:var(--t);font-size:13px;outline:none;transition:.3s}
-.ig input:focus,.ig textarea:focus,.ig select:focus{border-color:var(--p);box-shadow:0 0 0 2px var(--pg)}
-.btn{display:inline-flex;align-items:center;justify-content:center;gap:4px;padding:9px 18px;border-radius:7px;border:none;font-size:12px;font-weight:700;cursor:pointer;transition:.3s;color:#fff}
-.btn:hover{transform:translateY(-1px);filter:brightness(1.1)}.btn:active{transform:scale(.97)}.btn:disabled{opacity:.4;cursor:default;transform:none}
+.af{display:none}.af.on{display:block;animation:fadeIn .25s}
+.ig{margin-bottom:8px;text-align:left}
+.ig label{display:block;font-size:9px;color:var(--tm);margin-bottom:2px;font-weight:700;text-transform:uppercase}
+.ig input,.ig select,.ig textarea{width:100%;padding:9px 11px;border-radius:7px;border:1px solid var(--b);background:var(--ci);color:var(--t);font-size:13px;outline:none}
+.ig input:focus,.ig select:focus,.ig textarea:focus{border-color:var(--p)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:4px;padding:9px 16px;border-radius:7px;border:none;font-size:12px;font-weight:700;cursor:pointer;color:#fff;transition:.2s}
+.btn:hover{filter:brightness(1.1)}.btn:disabled{opacity:.45;cursor:default}
 .btn-p{background:linear-gradient(135deg,#ef4444,#dc2626);width:100%}
-.btn-s{padding:5px 12px;font-size:11px}
+.btn-s{padding:5px 11px;font-size:11px}
 .btn-del{background:linear-gradient(135deg,#f59e0b,#d97706)}
 .btn-taxi{background:linear-gradient(135deg,#8b5cf6,#7c3aed)}
 .btn-bank{background:linear-gradient(135deg,#06b6d4,#0891b2)}
-.btn-danger{background:linear-gradient(135deg,#ef4444,#b91c1c)}
 .btn-ok{background:linear-gradient(135deg,#10b981,#059669)}
+.btn-danger{background:linear-gradient(135deg,#ef4444,#b91c1c)}
 .btn-o{background:transparent;border:1px solid var(--b2);color:var(--t)}
-.btn-o:hover{border-color:var(--p);color:var(--p)}
-.err{color:#ef4444;font-size:10px;margin-top:2px;display:none;font-weight:700}
-.spinner{display:inline-block;width:13px;height:13px;border:2px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:spin .5s linear infinite;margin-right:4px}
+.err{color:#ef4444;font-size:10px;margin-top:3px;display:none;font-weight:700}
+.spinner{display:inline-block;width:14px;height:14px;border:2px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:spin .5s linear infinite;margin-right:4px}
 .cur{width:14px;height:14px;vertical-align:middle;image-rendering:pixelated}
-.cur-x{width:30px;height:30px;vertical-align:middle;image-rendering:pixelated}
-
-header{background:rgba(10,10,10,.95);padding:8px 4%;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--b);position:sticky;top:0;z-index:100;backdrop-filter:blur(15px);flex-wrap:wrap;gap:5px}
-.logo{font-size:26px;font-weight:900;background:linear-gradient(135deg,#ef4444,#f59e0b,#8b5cf6);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-size:200%;animation:grad 3s infinite;cursor:pointer}
+.cur-x{width:28px;height:28px;vertical-align:middle;image-rendering:pixelated}
+header{background:rgba(10,10,10,.95);padding:8px 4%;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--b);position:sticky;top:0;z-index:100;flex-wrap:wrap;gap:6px}
+.logo{font-size:24px;font-weight:900;background:linear-gradient(135deg,#ef4444,#f59e0b,#8b5cf6);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-size:200%;animation:grad 3s infinite}
 .ui{display:flex;align-items:center;gap:5px;font-size:11px;flex-wrap:wrap}
 .ui .av{width:26px;height:26px;border-radius:6px;image-rendering:pixelated;border:1px solid var(--b);cursor:pointer}
-.ui .nk{font-weight:700;cursor:pointer}.ui .nk:hover{color:var(--p)}
-.bal{background:rgba(6,182,212,.08);padding:3px 8px;border-radius:5px;font-weight:700;color:var(--bank);font-size:11px;display:flex;align-items:center;gap:3px;border:1px solid rgba(6,182,212,.15)}
-.adb{background:linear-gradient(135deg,#ef4444,#f59e0b);color:#fff;padding:1px 6px;border-radius:3px;font-size:8px;font-weight:800;display:none}
-.lo{background:none;border:1px solid var(--b);color:var(--tm);padding:3px 8px;border-radius:5px;cursor:pointer;font-size:10px;font-weight:600}
-.lo:hover{border-color:var(--p);color:var(--p)}
-.lang-sel{background:var(--ci);border:1px solid var(--b);color:var(--tm);padding:3px 6px;border-radius:5px;font-size:10px;cursor:pointer;outline:none}
-
-.tabs{display:flex;justify-content:center;gap:3px;padding:10px 4%;flex-wrap:wrap}
-.tb{padding:7px 14px;border-radius:8px;border:1px solid var(--b);background:var(--c1);color:var(--tm);font-size:11px;font-weight:700;cursor:pointer;transition:.3s;position:relative}
-.tb:hover{border-color:var(--b2);color:var(--t)}
+.ui .nk{font-weight:700;cursor:pointer}
+.bal{background:rgba(6,182,212,.1);padding:3px 8px;border-radius:5px;font-weight:700;color:var(--bank);display:flex;align-items:center;gap:3px;border:1px solid rgba(6,182,212,.2)}
+.adb{background:linear-gradient(135deg,#ef4444,#f59e0b);color:#fff;padding:1px 6px;border-radius:3px;font-size:8px;font-weight:800}
+.lo{background:none;border:1px solid var(--b);color:var(--tm);padding:3px 8px;border-radius:5px;cursor:pointer;font-size:10px}
+.lang-sel{background:var(--ci);border:1px solid var(--b);color:var(--tm);padding:3px 6px;border-radius:5px;font-size:10px}
+.tabs{display:flex;justify-content:center;gap:4px;padding:10px 4%;flex-wrap:wrap}
+.tb{padding:7px 12px;border-radius:8px;border:1px solid var(--b);background:var(--c1);color:var(--tm);font-size:11px;font-weight:700;cursor:pointer;position:relative}
 .tb.a-del{border-color:var(--del);color:var(--del)}
 .tb.a-taxi{border-color:var(--taxi);color:var(--taxi)}
 .tb.a-bank{border-color:var(--bank);color:var(--bank)}
 .tb.a-ord{border-color:var(--ok);color:var(--ok)}
 .tb.a-adm{border-color:var(--p);color:var(--p)}
 .tb.a-work{border-color:var(--taxi);color:var(--taxi)}
-
-.panel{display:none;max-width:900px;margin:0 auto;padding:0 4% 40px}.panel.active{display:block;animation:fadeIn .4s}
-.pt{font-size:20px;font-weight:900;text-align:center;background:linear-gradient(135deg,#ef4444,#f59e0b,#8b5cf6);-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:2px}
-.ps{text-align:center;color:var(--tm);margin-bottom:16px;font-size:11px}
-.sl{font-size:9px;font-weight:800;color:var(--tm);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px}
-.g2{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:8px;margin-bottom:12px}
-.g3{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:8px;margin-bottom:12px}
-.card{background:var(--c1);border-radius:10px;padding:14px;border:1px solid var(--b);transition:.3s}
-.card:hover{border-color:var(--b2);transform:translateY(-2px)}.card.click{cursor:pointer}.card.sel{border-color:var(--p);box-shadow:0 0 10px var(--pg)}
-.card h3{font-size:13px;font-weight:700;margin-bottom:3px}.card .m{font-size:10px;color:var(--tm)}
-.shop-img{width:100%;height:100px;object-fit:cover;border-radius:6px;margin-bottom:6px;border:1px solid var(--b)}
-.ilist{background:var(--c1);border-radius:10px;padding:14px;border:1px solid var(--b);margin-bottom:12px}
-.irow{display:flex;align-items:center;justify-content:space-between;padding:6px 0;border-bottom:1px solid var(--b)}.irow:last-child{border-bottom:none}
-.iinfo{display:flex;align-items:center;gap:6px}
-.iicon{font-size:18px;width:28px;height:28px;display:flex;align-items:center;justify-content:center;background:var(--ci);border-radius:5px;overflow:hidden}
-.iprice{color:var(--bank);font-weight:700;font-size:11px}
-.qc{display:flex;align-items:center;gap:5px}
-.qb{width:26px;height:26px;border-radius:5px;border:1px solid var(--b);background:var(--ci);color:var(--t);font-size:13px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-weight:700}
-.qb:hover{border-color:var(--p);color:var(--p)}.qv{font-weight:800;width:20px;text-align:center}
-.cart{background:var(--c1);border-radius:10px;padding:14px;border:1px solid var(--b);margin-bottom:12px}.cart h3{margin-bottom:8px;font-size:12px}
-.ci-r{display:flex;justify-content:space-between;padding:3px 0;font-size:11px}
-.ct{border-top:2px solid var(--b2);margin-top:5px;padding-top:5px;display:flex;justify-content:space-between;font-weight:800;font-size:13px;color:var(--p)}
-
-.map-frame{width:100%;height:60vh;min-height:350px;border:1px solid var(--b);border-radius:8px;background:var(--ci);margin-bottom:8px}
-
+.tb .ntf{position:absolute;top:-4px;right:-4px;background:var(--p);color:#fff;width:14px;height:14px;border-radius:50%;font-size:8px;display:flex;align-items:center;justify-content:center;animation:pulse 1s infinite}
+.panel{display:none;max-width:920px;margin:0 auto;padding:0 4% 40px}
+.panel.active{display:block;animation:fadeIn .3s}
+.pt{font-size:20px;font-weight:900;text-align:center;background:linear-gradient(135deg,#ef4444,#f59e0b,#8b5cf6);-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:4px}
+.ps{text-align:center;color:var(--tm);margin-bottom:14px;font-size:11px}
+.sl{font-size:10px;font-weight:800;color:var(--tm);text-transform:uppercase;margin-bottom:6px}
+.g2{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:10px;margin-bottom:12px}
+.g3{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px;margin-bottom:12px}
+.card{background:var(--c1);border-radius:12px;padding:14px;border:1px solid var(--b)}
+.card.click{cursor:pointer}.card.sel{border-color:var(--p);box-shadow:0 0 12px rgba(239,68,68,.25)}
+.card h3{font-size:13px;margin-bottom:4px}.card .m{font-size:10px;color:var(--tm)}
+.shop-img{width:100%;height:100px;object-fit:cover;border-radius:8px;margin-bottom:8px;border:1px solid var(--b)}
+.ilist{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-bottom:12px}
+.irow{background:var(--c1);border:1px solid var(--b);border-radius:12px;padding:12px;text-align:center}
+.iicon{width:56px;height:56px;margin:0 auto 8px;background:var(--ci);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:28px;overflow:hidden;border:1px solid var(--b)}
+.iicon img{width:100%;height:100%;object-fit:cover}
+.ititle{font-size:12px;font-weight:700;margin-bottom:4px}
+.iprice{color:var(--ok);font-weight:800;font-size:12px;margin-bottom:4px}
+.istock{font-size:9px;color:var(--tm);margin-bottom:8px}
+.qc{display:flex;align-items:center;justify-content:center;gap:6px;background:var(--ci);border-radius:8px;padding:4px;border:1px solid var(--b)}
+.qb{width:28px;height:28px;border:none;border-radius:6px;background:var(--b2);color:#fff;font-weight:700;cursor:pointer}
+.qv{font-weight:800;min-width:20px;text-align:center}
+.cart{background:var(--c1);border-radius:12px;padding:14px;border:1px solid var(--b);margin-bottom:12px}
+.ci-r{display:flex;justify-content:space-between;font-size:12px;padding:3px 0}
+.ct{border-top:1px solid var(--b2);margin-top:6px;padding-top:6px;display:flex;justify-content:space-between;font-weight:800;color:var(--p)}
+.map-wrap{position:relative;width:100%;height:50vh;min-height:300px;border-radius:12px;overflow:hidden;border:1px solid var(--b);margin-bottom:10px}
+.map-frame{width:100%;height:100%;border:none;background:#111}
+.map-top{position:absolute;top:8px;right:8px;z-index:5}
+.map-bot{position:absolute;bottom:8px;left:8px;right:8px;z-index:5;display:flex;gap:6px;background:rgba(10,10,10,.88);padding:8px;border-radius:8px;border:1px solid rgba(255,255,255,.1)}
+.map-btn{background:rgba(30,30,30,.9);border:1px solid rgba(255,255,255,.2);color:#fff;padding:6px 10px;border-radius:6px;font-size:11px;cursor:pointer;font-weight:700}
 .payopts{display:flex;gap:6px;margin-bottom:8px}
-.payopt{flex:1;padding:8px;border-radius:8px;border:1px solid var(--b);background:var(--ci);color:var(--t);cursor:pointer;text-align:center;font-weight:700;font-size:11px}
-.payopt.sel{border-color:var(--p);box-shadow:0 0 8px var(--pg)}
-.bdisp{font-size:30px;font-weight:900;color:var(--bank);margin:8px 0;display:flex;align-items:center;justify-content:center;gap:6px}
-.txs{background:var(--c1);border-radius:10px;padding:14px;border:1px solid var(--b)}
-.txr{display:flex;justify-content:space-between;align-items:center;padding:5px 0;border-bottom:1px solid var(--b);font-size:10px}.txr:last-child{border-bottom:none}
+.payopt{flex:1;padding:9px;border-radius:8px;border:1px solid var(--b);background:var(--ci);text-align:center;font-weight:700;font-size:11px;cursor:pointer}
+.payopt.sel{border-color:var(--p);box-shadow:0 0 8px rgba(239,68,68,.2)}
+.bdisp{font-size:28px;font-weight:900;color:var(--bank);margin:8px 0;display:flex;align-items:center;justify-content:center;gap:6px}
+.txs{background:var(--c1);border-radius:12px;padding:14px;border:1px solid var(--b);margin-top:10px}
+.txr{display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid var(--b);font-size:11px}
 .tx-p{color:var(--ok);font-weight:700}.tx-n{color:var(--p);font-weight:700}
-.ocard{background:var(--c1);border-radius:10px;padding:14px;border:1px solid var(--b);margin-bottom:8px}
-.sb{display:inline-block;padding:2px 6px;border-radius:6px;font-size:9px;font-weight:700}
-.sb.w{background:rgba(245,158,11,.1);color:var(--del)}.sb.a{background:rgba(16,185,129,.1);color:var(--ok)}.sb.r{background:rgba(239,68,68,.1);color:var(--p)}.sb.t{background:rgba(139,92,246,.1);color:var(--taxi)}
-.asec{margin-bottom:18px}.asec h3{margin-bottom:8px;padding-bottom:5px;border-bottom:1px solid var(--b);font-size:13px}
-.pcard{background:var(--c1);border-radius:8px;padding:10px;border:1px solid var(--b);margin-bottom:6px}
-.pcard .acts{display:flex;gap:4px;margin-top:5px;flex-wrap:wrap}
-
-.chat-box{background:var(--c1);border-radius:12px;padding:15px;width:92%;max-width:400px;border:1px solid var(--b);display:flex;flex-direction:column;height:70vh}
-.chat-msgs{flex:1;overflow-y:auto;padding:10px;background:var(--ci);border-radius:8px;border:1px solid var(--b);margin-bottom:10px;display:flex;flex-direction:column;gap:8px}
-.msg{max-width:85%;padding:6px 10px;border-radius:10px;font-size:12px;line-height:1.4}
-.msg.my{background:var(--p);color:#fff;align-self:flex-end;border-bottom-right-radius:2px}
-.msg.other{background:var(--b2);color:var(--t);align-self:flex-start;border-bottom-left-radius:2px}
-.msg-time{font-size:8px;opacity:.7;margin-top:3px;text-align:right}
-
-.profile-overlay{position:fixed;inset:0;background:rgba(0,0,0,.85);display:flex;align-items:center;justify-content:center;z-index:1100;backdrop-filter:blur(6px)}
-.profile-box{background:var(--c1);border-radius:14px;padding:22px;width:92%;max-width:420px;border:1px solid var(--b);max-height:88vh;overflow-y:auto;animation:scaleIn .3s}
-.profile-box .av-big{width:64px;height:64px;border-radius:10px;image-rendering:pixelated;border:2px solid var(--b);margin:0 auto 8px;display:block;animation:borderG 3s linear infinite}
-.profile-box h2{text-align:center;font-size:16px}.profile-box .em{text-align:center;color:var(--tm);font-size:10px;margin-bottom:10px}
-.pstats{display:flex;gap:6px;margin-bottom:12px;flex-wrap:wrap}
-.stat{flex:1;min-width:60px;background:var(--ci);border-radius:6px;padding:8px;text-align:center;border:1px solid var(--b)}
-.stat .v{font-size:16px;font-weight:800;color:var(--p)}.stat .l{font-size:8px;color:var(--tm);text-transform:uppercase;margin-top:1px}
-.psec{margin-bottom:12px}.psec h4{font-size:11px;font-weight:700;margin-bottom:6px;padding-bottom:4px;border-bottom:1px solid var(--b)}
-.loc{background:var(--ci);border-radius:6px;padding:8px;border:1px solid var(--b);margin-bottom:4px}.loc h5{font-size:10px;font-weight:700;margin-bottom:4px}
-.modal{position:fixed;inset:0;background:rgba(0,0,0,.85);display:flex;align-items:center;justify-content:center;z-index:1100;backdrop-filter:blur(6px)}
-.mbox{background:var(--c1);border-radius:14px;padding:22px;width:92%;max-width:460px;border:1px solid var(--b);max-height:88vh;overflow-y:auto;animation:scaleIn .3s}
-.mbox h3{margin-bottom:12px;font-weight:800}
-.toast{position:fixed;bottom:16px;right:16px;background:linear-gradient(135deg,#ef4444,#f59e0b);color:#fff;padding:10px 18px;border-radius:8px;font-weight:700;font-size:11px;transform:translateY(80px);opacity:0;transition:.4s;z-index:1300;max-width:300px}
-.toast.show{transform:translateY(0);opacity:1}.toast.err{background:linear-gradient(135deg,#ef4444,#7f1d1d)}
-.work-order{background:var(--c1);border-radius:10px;padding:14px;border:1px solid var(--b);margin-bottom:8px;position:relative;overflow:hidden}
+.ocard,.work-order,.pcard{background:var(--c1);border-radius:10px;padding:12px;border:1px solid var(--b);margin-bottom:8px}
+.work-order{position:relative;overflow:hidden}
 .work-order::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,#ef4444,#f59e0b,#8b5cf6)}
-.work-order .reward{font-size:16px;font-weight:900;color:var(--ok);margin:4px 0}
-.badge-new{position:absolute;top:8px;right:8px;background:var(--p);color:#fff;padding:2px 6px;border-radius:6px;font-size:8px;font-weight:800;animation:pulse 1s infinite}
-.user-row{display:flex;align-items:center;gap:6px;padding:6px 0;border-bottom:1px solid var(--b);font-size:11px}.user-row:last-child{border-bottom:none}
+.reward{font-size:16px;font-weight:900;color:var(--ok);margin:4px 0}
+.badge-new{position:absolute;top:8px;right:8px;background:var(--p);color:#fff;padding:2px 6px;border-radius:6px;font-size:8px;font-weight:800}
+.sb{display:inline-block;padding:2px 6px;border-radius:6px;font-size:9px;font-weight:700}
+.sb.w{background:rgba(245,158,11,.15);color:var(--del)}.sb.a{background:rgba(16,185,129,.15);color:var(--ok)}.sb.r{background:rgba(239,68,68,.15);color:var(--p)}.sb.t{background:rgba(139,92,246,.15);color:var(--taxi)}
+.asec{margin-bottom:16px}.asec h3{font-size:13px;margin-bottom:8px;padding-bottom:4px;border-bottom:1px solid var(--b)}
+.user-row{display:flex;align-items:center;gap:6px;padding:6px 0;border-bottom:1px solid var(--b);font-size:11px}
 .user-row img{width:20px;height:20px;border-radius:4px;image-rendering:pixelated}
-.online-dot{width:7px;height:7px;border-radius:50%}.online-dot.on{background:var(--ok)}.online-dot.off{background:var(--td)}
-.loading-screen{position:fixed;inset:0;background:var(--bg);display:flex;align-items:center;justify-content:center;z-index:2000;flex-direction:column;gap:10px}
+.dot{width:7px;height:7px;border-radius:50%}.dot.on{background:var(--ok)}.dot.off{background:#555}
+.online-badge{display:inline-block;background:rgba(16,185,129,.15);color:var(--ok);padding:1px 6px;border-radius:4px;font-size:9px;font-weight:700;margin-left:4px}
+.modal,.profile-overlay{position:fixed;inset:0;background:rgba(0,0,0,.85);display:flex;align-items:center;justify-content:center;z-index:1100}
+.mbox,.profile-box{background:var(--c1);border-radius:14px;padding:20px;width:92%;max-width:440px;border:1px solid var(--b);max-height:88vh;overflow-y:auto;animation:scaleIn .3s}
+.chat-box{background:var(--c1);border-radius:12px;padding:14px;width:92%;max-width:400px;border:1px solid var(--b);display:flex;flex-direction:column;height:70vh}
+.chat-msgs{flex:1;overflow-y:auto;padding:8px;background:var(--ci);border-radius:8px;margin-bottom:8px;display:flex;flex-direction:column;gap:6px}
+.msg{max-width:85%;padding:6px 10px;border-radius:10px;font-size:12px}
+.msg.my{background:var(--p);align-self:flex-end}.msg.other{background:var(--b2);align-self:flex-start}
+.toast{position:fixed;bottom:16px;right:16px;background:linear-gradient(135deg,#ef4444,#f59e0b);color:#fff;padding:10px 16px;border-radius:8px;font-weight:700;font-size:11px;transform:translateY(80px);opacity:0;transition:.35s;z-index:2000;max-width:300px}
+.toast.show{transform:none;opacity:1}.toast.err{background:linear-gradient(135deg,#ef4444,#7f1d1d)}
+.loading-screen{position:fixed;inset:0;background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:3000;gap:12px}
 .loading-screen h1{font-size:36px;font-weight:900;background:linear-gradient(135deg,#ef4444,#f59e0b,#8b5cf6);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
-.loading-screen .spinner{width:24px;height:24px;border-width:3px}
-@media(max-width:600px){header{flex-direction:column}.tabs{gap:2px}.tb{padding:5px 8px;font-size:9px}.payopts{flex-direction:column}.g2,.g3{grid-template-columns:1fr}}
+@media(max-width:600px){.tabs{gap:2px}.tb{padding:6px 8px;font-size:10px}.g2,.g3,.ilist{grid-template-columns:1fr}.map-wrap{height:40vh}}
 </style>
 </head>
 <body>
-<div class="loading-screen" id="loadScr"><h1>RAP</h1><div class="spinner"></div><p style="color:var(--tm);font-size:11px">Загрузка...</p></div>
+<div class="loading-screen" id="loadScr"><h1>RAP</h1><div class="spinner" style="width:24px;height:24px;border-width:3px"></div><p style="color:var(--tm);font-size:11px">Загрузка...</p></div>
 
 <div class="overlay h" id="authScr"><div class="auth">
-<div class="mc-head" id="aAv">⛏️</div><h2>RAP</h2><p class="sub" data-t="auth_sub">Доставка · Такси · Банк</p>
-<div style="margin-bottom:10px"><select class="lang-sel" onchange="setLang(this.value)"><option value="ru">🇷🇺 Русский</option><option value="en">🇬🇧 English</option><option value="be">🇧🇾 Беларуская</option><option value="uk">🇺🇦 Українська</option></select></div>
-<div class="atabs"><button class="atab on" onclick="aTab('login')" data-t="login_tab">Вход</button><button class="atab" onclick="aTab('reg')" data-t="reg_tab">Регистрация</button><button class="atab" onclick="aTab('reset')" data-t="reset_tab">Забыл</button></div>
-<div class="af on" id="f-login"><div class="ig"><label data-t="nick_label">Minecraft ник</label><input type="text" id="lN" placeholder="Ник" oninput="pSkin('lN')"></div><div class="ig"><label data-t="pass_label">Пароль</label><input type="password" id="lP" placeholder="Пароль"></div><p class="err" id="lE"></p><button class="btn btn-p" style="margin-top:4px" id="loginBtn" onclick="doLogin()" data-t="login_btn">Войти ⛏️</button></div>
-<div class="af" id="f-reg"><div class="ig"><label data-t="nick_label">Minecraft ник</label><input type="text" id="rN" placeholder="Steve" oninput="pSkin('rN')"></div><div class="ig"><label data-t="email_label">Google почта</label><input type="email" id="rE" placeholder="mail@gmail.com"></div><div class="ig"><label data-t="pass_label">Пароль</label><input type="password" id="rP" placeholder="Мин. 4"></div><div class="ig"><label data-t="pass2_label">Повторите</label><input type="password" id="rP2"></div><p class="err" id="rErr"></p><button class="btn btn-p" style="margin-top:4px" id="regBtn" onclick="doReg()" data-t="reg_btn">Создать</button></div>
-<div class="af" id="f-reset"><div class="ig"><label data-t="nick_label">Minecraft ник</label><input type="text" id="rsN" placeholder="Ник"></div><p class="err" id="rsE"></p><button class="btn btn-p" id="rsBtn" onclick="doReset()" data-t="reset_btn">Сбросить пароль</button></div>
-<div class="af" id="f-verify"><div style="font-size:40px;margin-bottom:6px">📧</div><p style="color:var(--tm);font-size:10px" data-t="code_sent">Код отправлен на</p><p style="color:var(--p);font-weight:700;margin-bottom:10px" id="vEm"></p><div class="ig"><label data-t="code_label">Код из письма</label><input type="text" id="vC" maxlength="6" style="text-align:center;font-size:18px;letter-spacing:4px;font-weight:800"></div><p class="err" id="vE"></p><button class="btn btn-p" onclick="doVerify()" data-t="verify_btn">Подтвердить ✓</button><button class="btn btn-o btn-s" style="margin-top:6px;width:100%" id="resendBtn" onclick="resendCode()" data-t="resend_btn">Отправить повторно</button></div>
+<div class="mc-head" id="aAv">⛏️</div>
+<h2>RAP</h2><p class="sub">Доставка · Такси · Банк</p>
+<div style="margin-bottom:10px"><select class="lang-sel" id="authLang" onchange="setLang(this.value)"><option value="ru">🇷🇺 RU</option><option value="en">🇬🇧 EN</option></select></div>
+<div class="atabs">
+<button class="atab on" onclick="aTab('login')">Вход</button>
+<button class="atab" onclick="aTab('reg')">Регистрация</button>
+<button class="atab" onclick="aTab('reset')">Забыл</button>
+</div>
+<div class="af on" id="f-login">
+<div class="ig"><label>Minecraft ник</label><input type="text" id="lN" placeholder="Ник" oninput="pSkin('lN')"></div>
+<div class="ig"><label>Пароль</label><input type="password" id="lP" placeholder="Пароль"></div>
+<p class="err" id="lE"></p>
+<button class="btn btn-p" id="loginBtn" onclick="doLogin()">Войти ⛏️</button>
+</div>
+<div class="af" id="f-reg">
+<div class="ig"><label>Minecraft ник</label><input type="text" id="rN" placeholder="Steve" oninput="pSkin('rN')"></div>
+<div class="ig"><label>Google почта</label><input type="email" id="rE" placeholder="mail@gmail.com"></div>
+<div class="ig"><label>Пароль</label><input type="password" id="rP" placeholder="Мин. 4"></div>
+<div class="ig"><label>Повторите</label><input type="password" id="rP2"></div>
+<p class="err" id="rErr"></p>
+<button class="btn btn-p" id="regBtn" onclick="doReg()">Создать</button>
+</div>
+<div class="af" id="f-reset">
+<div class="ig"><label>Minecraft ник</label><input type="text" id="rsN" placeholder="Ник"></div>
+<p class="err" id="rsE"></p>
+<button class="btn btn-p" id="rsBtn" onclick="doReset()">Сбросить пароль</button>
+</div>
+<div class="af" id="f-verify">
+<div style="font-size:36px;margin-bottom:6px">📧</div>
+<p style="color:var(--tm);font-size:10px">Код отправлен на</p>
+<p style="color:var(--p);font-weight:700;margin-bottom:8px" id="vEm"></p>
+<div class="ig"><label>Код</label><input type="text" id="vC" maxlength="6" style="text-align:center;font-size:20px;letter-spacing:5px;font-weight:800"></div>
+<p class="err" id="vE"></p>
+<button class="btn btn-p" onclick="doVerify()">Подтвердить ✓</button>
+<button class="btn btn-o btn-s" style="width:100%;margin-top:6px" id="resendBtn" onclick="resendCode()">Повторно</button>
+</div>
 </div></div>
 
-<header id="hdr" style="display:none"><div class="logo">RAP</div><div class="ui"><img class="av" id="hAv" src="" onclick="openProf()"><span class="nk" id="hNk" onclick="openProf()"></span><span class="adb h" id="hAd">OWNER</span><div class="bal"><img class="cur" src="https://i.imgur.com/mxv6EO1.png" onerror="this.outerHTML='💎'"><span id="hBal">0</span></div><select class="lang-sel" onchange="setLang(this.value)" id="hLang"><option value="ru">🇷🇺</option><option value="en">🇬🇧</option><option value="be">🇧🇾</option><option value="uk">🇺🇦</option></select><button class="lo" onclick="logout()" data-t="logout">Выйти</button></div></header>
+<header id="hdr" style="display:none">
+<div class="logo">RAP</div>
+<div class="ui">
+<img class="av" id="hAv" src="" onclick="openProf()">
+<span class="nk" id="hNk" onclick="openProf()"></span>
+<span class="adb h" id="hAd">OWNER</span>
+<div class="bal"><img class="cur" src="https://i.imgur.com/mxv6EO1.png" onerror="this.outerHTML='💎'"><span id="hBal">0</span></div>
+<select class="lang-sel" id="hLang" onchange="setLang(this.value)"><option value="ru">🇷🇺</option><option value="en">🇬🇧</option></select>
+<button class="lo" onclick="logout()">Выйти</button>
+</div>
+</header>
 
 <div class="tabs h" id="tC">
-<button class="tb" onclick="sTab('delivery',this)" id="tD" data-t="tab_del">📦 Доставка</button>
-<button class="tb" onclick="sTab('taxi',this)" id="tT" data-t="tab_taxi">🚀 Такси</button>
-<button class="tb" onclick="sTab('bank',this)" id="tB" data-t="tab_bank">🏦 Банк</button>
-<button class="tb" onclick="sTab('orders',this)" id="tO" data-t="tab_orders">📋 Заказы</button>
-<button class="tb h" onclick="sTab('work',this)" id="tW" data-t="tab_work">💼 Работа</button>
-<button class="tb h" onclick="sTab('admin',this)" id="tA">🔧 Админ</button>
+<button class="tb" id="tD" onclick="sTab('delivery',this)">📦 Доставка</button>
+<button class="tb" id="tT" onclick="sTab('taxi',this)">🚀 Такси</button>
+<button class="tb" id="tB" onclick="sTab('bank',this)">🏦 Банк</button>
+<button class="tb" id="tO" onclick="sTab('orders',this)">📋 Заказы</button>
+<button class="tb h" id="tW" onclick="sTab('work',this)">💼 Работа</button>
+<button class="tb h" id="tA" onclick="sTab('admin',this)">🔧 Админ</button>
 </div>
 
-<div class="panel" id="p-delivery"><h2 class="pt" data-t="del_title">📦 Доставка</h2><p class="ps" data-t="del_sub">Магазин → товары → точка → заказ</p><div class="sl" data-t="shops">🏪 Магазины</div><div class="g3" id="dsG"></div><div class="h" id="dsI"><div class="ilist"><h3 id="dsT"></h3><div id="dsIL"></div></div></div><div class="h" id="dsC"><div class="cart"><h3 data-t="cart">🛒 Корзина</h3><div id="dsCL"></div><div class="ci-r" style="color:var(--del)"><span data-t="delivery_fee">🚚 Доставка</span><span id="dsF">—</span></div><div class="ct"><span data-t="total">Итого:</span><span id="dsTot">0</span></div></div></div><div class="h" id="dsM"><div class="sl" data-t="pick_point">📍 Точка доставки</div>
-<div style="display:flex;justify-content:flex-end;margin-bottom:4px"><button class="btn btn-o btn-s" onclick="document.getElementById('map1').requestFullscreen()">🔲 На весь экран</button></div>
-<iframe src="https://mc-webcraft.ru/map/" class="map-frame" id="map1"></iframe>
-<p class="m" style="text-align:center;margin-bottom:6px">Посмотри на карте, выбери онлайн игрока ИЛИ введи координаты ниже:</p>
-<div style="margin-bottom:10px"><button class="btn btn-bank btn-s" style="width:100%" onclick="getOnlinePlayers()">🌍 Загрузить игроков онлайн</button><select class="online-select" id="delPlr" style="width:100%;margin-top:4px;padding:6px;background:var(--ci);color:var(--t);border:1px solid var(--b);border-radius:4px"><option value="">— Выбери игрока онлайн —</option></select></div>
-<div style="display:flex;gap:6px;margin-bottom:10px"><div class="ig" style="flex:1"><label>X</label><input type="number" id="delX" oninput="uDCC()"></div><div class="ig" style="flex:1"><label>Z</label><input type="number" id="delZ" oninput="uDCC()"></div></div></div><div class="h" id="dsP"><div class="sl" data-t="payment">💳 Оплата</div><div class="payopts"><div class="payopt sel" onclick="sPay('online',this)"><img class="cur" src="https://i.imgur.com/mxv6EO1.png" onerror="this.outerHTML='💎'"> <span data-t="online">Онлайн</span></div><div class="payopt" onclick="sPay('cash',this)" data-t="cash">🤝 Наличные</div></div><div class="ig"><label data-t="comment">Комментарий</label><textarea id="dCom" rows="2"></textarea></div><button class="btn btn-del" style="width:100%" onclick="placeDel()" data-t="place_order">Оформить 📦</button></div></div>
+<div class="panel" id="p-delivery">
+<h2 class="pt">📦 Доставка</h2>
+<p class="ps">Магазин → товары → точка → заказ</p>
+<div class="sl">🏪 Магазины</div>
+<div class="g3" id="dsG"></div>
+<div class="h" id="dsI"><div class="sl" id="dsT" style="color:var(--t);font-size:13px"></div><div class="ilist" id="dsIL"></div></div>
+<div class="h" id="dsC"><div class="cart"><h3>🛒 Корзина</h3><div id="dsCL"></div><div class="ci-r" style="color:var(--del)"><span>🚚 Доставка</span><span id="dsF">—</span></div><div class="ct"><span>Итого:</span><span id="dsTot">0</span></div></div></div>
+<div class="h" id="dsM">
+<div class="sl">📍 Точка доставки</div>
+<div class="map-wrap">
+<div class="map-top"><button class="map-btn" onclick="fs('map1')">🔲 Экран</button></div>
+<iframe class="map-frame" id="map1" src="https://mc-webcraft.ru/map/"></iframe>
+<div class="map-bot">
+<button class="btn btn-bank btn-s" onclick="getOnlinePlayers()">🌍 Онлайн</button>
+<select class="online-select" id="delPlr" style="flex:1;padding:6px;background:var(--ci);color:var(--t);border:1px solid var(--b2);border-radius:6px;font-size:11px"><option value="">— Игрок —</option></select>
+</div>
+</div>
+<div style="display:flex;gap:6px"><div class="ig" style="flex:1"><label>X</label><input type="number" id="delX" oninput="uDCC()"></div><div class="ig" style="flex:1"><label>Z</label><input type="number" id="delZ" oninput="uDCC()"></div></div>
+</div>
+<div class="h" id="dsP">
+<div class="sl">💳 Оплата</div>
+<div class="payopts">
+<div class="payopt sel" onclick="sPay('online',this)"><img class="cur" src="https://i.imgur.com/mxv6EO1.png" onerror="this.outerHTML='💎'"> Онлайн</div>
+<div class="payopt" onclick="sPay('cash',this)">🤝 Наличные</div>
+</div>
+<div class="ig"><label>Комментарий</label><textarea id="dCom" rows="2"></textarea></div>
+<button class="btn btn-del" style="width:100%" onclick="placeDel()">Оформить 📦</button>
+</div>
+</div>
 
-<div class="panel" id="p-taxi"><h2 class="pt" data-t="taxi_title">🚀 Такси</h2><p class="ps" data-t="taxi_sub">Элитра-экспресс</p>
-<div class="card" style="max-width:500px;margin:0 auto">
-    <div style="display:flex;justify-content:flex-end;margin-bottom:4px"><button class="btn btn-o btn-s" onclick="document.getElementById('map2').requestFullscreen()">🔲 На весь экран</button></div>
-    <iframe src="https://mc-webcraft.ru/map/" class="map-frame" id="map2"></iframe>
-    <div class="sl" data-t="from" style="margin-top:10px">📍 Откуда (забрать)</div>
-    <div style="margin-bottom:6px"><button class="btn btn-bank btn-s" style="width:100%" onclick="getOnlinePlayers()">🌍 Выбрать игроков онлайн</button><select class="online-select" id="taxPlr" style="width:100%;margin-top:4px;padding:6px;background:var(--ci);color:var(--t);border:1px solid var(--b);border-radius:4px"><option value="">— Выбери игрока (авто-ввод координат) —</option></select></div>
-    <div style="display:flex;gap:6px;margin-bottom:10px"><div class="ig" style="flex:1"><label>X</label><input type="number" id="txFX" oninput="cTxP()"></div><div class="ig" style="flex:1"><label>Z</label><input type="number" id="txFZ" oninput="cTxP()"></div></div>
-    
-    <div class="sl" data-t="to">📍 Куда (привезти)</div>
-    <div style="display:flex;gap:6px;margin-bottom:10px"><div class="ig" style="flex:1"><label>X</label><input type="number" id="txTX" oninput="cTxP()"></div><div class="ig" style="flex:1"><label>Z</label><input type="number" id="txTZ" oninput="cTxP()"></div></div>
-    
-    <div class="sl" data-t="payment">💳 Оплата</div>
-    <div class="payopts" id="taxPayOpts">
-        <div class="payopt sel" onclick="sPayTx('online',this)"><img class="cur" src="https://i.imgur.com/mxv6EO1.png" onerror="this.outerHTML='💎'"> <span data-t="online">Онлайн</span></div>
-        <div class="payopt" onclick="sPayTx('cash',this)" data-t="cash">🤝 Наличные</div>
-    </div>
-    
-    <div id="txPr" style="text-align:center;margin:6px 0;color:var(--taxi);font-weight:800"></div>
-    <div class="ig"><label data-t="comment">Комментарий</label><textarea id="txCom" rows="2"></textarea></div>
-    <button class="btn btn-taxi" style="width:100%" onclick="ordTx()" data-t="call_taxi">Вызвать 🚀</button>
-</div></div>
+<div class="panel" id="p-taxi">
+<h2 class="pt">🚀 Такси</h2>
+<p class="ps">Выбери игрока (откуда) → укажи куда</p>
+<div class="card" style="max-width:520px;margin:0 auto">
+<div class="map-wrap">
+<div class="map-top"><button class="map-btn" onclick="fs('map2')">🔲 Экран</button></div>
+<iframe class="map-frame" id="map2" src="https://mc-webcraft.ru/map/"></iframe>
+</div>
+<div class="sl">📍 Откуда (забрать игрока)</div>
+<button class="btn btn-bank btn-s" style="width:100%;margin-bottom:4px" onclick="getOnlinePlayers()">🌍 Загрузить онлайн</button>
+<select class="online-select" id="taxPlr" style="width:100%;margin-bottom:8px;padding:8px;background:var(--ci);color:var(--t);border:1px solid var(--b);border-radius:6px"><option value="">— Выбери игрока (корды подставятся) —</option></select>
+<div style="display:flex;gap:6px;margin-bottom:10px"><div class="ig" style="flex:1"><label>X откуда</label><input type="number" id="txFX" oninput="cTxP()"></div><div class="ig" style="flex:1"><label>Z откуда</label><input type="number" id="txFZ" oninput="cTxP()"></div></div>
+<div class="sl">📍 Куда (пункт назначения)</div>
+<div style="display:flex;gap:6px;margin-bottom:10px"><div class="ig" style="flex:1"><label>X куда</label><input type="number" id="txTX" oninput="cTxP()"></div><div class="ig" style="flex:1"><label>Z куда</label><input type="number" id="txTZ" oninput="cTxP()"></div></div>
+<div class="sl">💳 Оплата</div>
+<div class="payopts" id="taxPayOpts">
+<div class="payopt sel" onclick="sPayTx('online',this)"><img class="cur" src="https://i.imgur.com/mxv6EO1.png" onerror="this.outerHTML='💎'"> Онлайн</div>
+<div class="payopt" onclick="sPayTx('cash',this)">🤝 Наличные</div>
+</div>
+<div id="txPr" style="text-align:center;margin:8px 0;color:var(--taxi);font-weight:800"></div>
+<div class="ig"><label>Комментарий</label><textarea id="txCom" rows="2"></textarea></div>
+<button class="btn btn-taxi" style="width:100%" onclick="ordTx()">Вызвать 🚀</button>
+</div>
+</div>
 
-<div class="panel" id="p-bank"><h2 class="pt" data-t="bank_title">🏦 RAP Bank</h2><div class="g2"><div class="card" style="text-align:center"><h3 data-t="balance">Баланс</h3><div class="bdisp"><img class="cur-x" src="https://i.imgur.com/mxv6EO1.png" onerror="this.outerHTML='💎'"><span id="bB">0</span></div></div><div class="card"><h3 data-t="transfer">Перевод</h3><div class="ig"><label data-t="to_whom">Кому</label><input type="text" id="trN"></div><div class="ig"><label data-t="amount">Сумма</label><input type="number" id="trA" min="1"></div><button class="btn btn-bank btn-s" onclick="doTr()">→</button></div></div><div class="txs" style="margin-top:10px"><h3 style="font-size:12px" data-t="history">📜 История</h3><div id="txH"></div></div></div>
+<div class="panel" id="p-bank">
+<h2 class="pt">🏦 RAP Bank</h2>
+<div class="g2">
+<div class="card" style="text-align:center"><h3>Баланс</h3><div class="bdisp"><img class="cur-x" src="https://i.imgur.com/mxv6EO1.png" onerror="this.outerHTML='💎'"><span id="bB">0</span></div></div>
+<div class="card"><h3>Перевод</h3><div class="ig"><label>Кому</label><input type="text" id="trN"></div><div class="ig"><label>Сумма</label><input type="number" id="trA" min="1"></div><button class="btn btn-bank btn-s" onclick="doTr()">→</button></div>
+</div>
+<div class="txs"><h3 style="font-size:12px;margin-bottom:8px">📜 История</h3><div id="txH"></div></div>
+</div>
 
-<div class="panel" id="p-orders"><h2 class="pt" data-t="orders_title">📋 Заказы</h2><div id="oL"></div></div>
+<div class="panel" id="p-orders"><h2 class="pt">📋 Заказы</h2><div id="oL"></div></div>
+<div class="panel" id="p-work"><h2 class="pt">💼 Работа</h2><div class="sl">📦 Доставки</div><div id="wDel"></div><div class="sl" style="margin-top:12px">🚀 Такси</div><div id="wTaxi"></div><div class="sl" style="margin-top:12px">✅ Активные</div><div id="wAct"></div></div>
 
-<div class="panel" id="p-work"><h2 class="pt" data-t="work_title">💼 Работа</h2><div class="sl" data-t="avail_del">📦 Доставки</div><div id="wDel"></div><div class="sl" style="margin-top:14px" data-t="avail_taxi">🚀 Такси</div><div id="wTaxi"></div><div class="sl" style="margin-top:14px" data-t="my_active">✅ Активные</div><div id="wAct"></div></div>
-
-<div class="panel" id="p-admin"><h2 class="pt">🔧 Админка</h2>
+<div class="panel" id="p-admin">
+<h2 class="pt">🔧 Админка</h2>
 <div class="asec"><h3>👥 Пользователи</h3><div id="adUsers"></div></div>
-<div class="asec"><h3>🏪 Магазины</h3><button class="btn btn-p btn-s" style="margin-bottom:8px" onclick="openAS()">+</button><div id="adS"></div></div>
-<div class="asec"><h3>👥 Владельцы</h3><div style="display:flex;gap:4px;flex-wrap:wrap;align-items:flex-end;margin-bottom:8px"><div class="ig" style="flex:1;min-width:80px"><label>Ник</label><input type="text" id="owN"></div><div class="ig" style="flex:2;min-width:100px"><label>Магазин</label><select id="owS"><option value="">—</option></select></div><button class="btn btn-taxi btn-s" onclick="assOwn()">+</button></div><div id="owL"></div></div>
-<div class="asec"><h3>💰 Пополнить</h3><div style="display:flex;gap:4px;flex-wrap:wrap;align-items:flex-end"><div class="ig" style="flex:1;min-width:80px"><label>Ник</label><input type="text" id="adN"></div><div class="ig" style="flex:1;min-width:50px"><label>Сумма</label><input type="number" id="adA" min="1"></div><button class="btn btn-bank btn-s" onclick="adDep()">+</button></div></div>
-<div class="asec"><h3>👤 Тип</h3><div style="display:flex;gap:4px;flex-wrap:wrap;align-items:flex-end"><div class="ig" style="flex:1;min-width:80px"><label>Ник</label><input type="text" id="ptN"></div><div class="ig" style="flex:1"><label>Тип</label><select id="ptT"><option value="regular">Обычный</option><option value="elite">Элита</option></select></div><button class="btn btn-taxi btn-s" onclick="setTp()">✓</button></div></div>
+<div class="asec"><h3>🏪 Магазины</h3><button class="btn btn-p btn-s" style="margin-bottom:8px" onclick="openAS()">+ Добавить</button><div id="adS"></div></div>
+<div class="asec"><h3>💰 Пополнить</h3><div style="display:flex;gap:6px;flex-wrap:wrap;align-items:flex-end"><div class="ig" style="flex:1"><label>Ник</label><input id="adN"></div><div class="ig" style="flex:1"><label>Сумма</label><input type="number" id="adA" min="1"></div><button class="btn btn-bank btn-s" onclick="adDep()">+</button></div></div>
+<div class="asec"><h3>👤 Тип</h3><div style="display:flex;gap:6px;flex-wrap:wrap;align-items:flex-end"><div class="ig" style="flex:1"><label>Ник</label><input id="ptN"></div><div class="ig" style="flex:1"><label>Тип</label><select id="ptT"><option value="regular">Обычный</option><option value="elite">Элита</option></select></div><button class="btn btn-taxi btn-s" onclick="setTp()">✓</button></div></div>
 <div class="asec"><h3>📋 Заявки заказов</h3><div id="adP"></div></div>
-<div class="asec"><h3>🛠️ Заявки работа</h3><div id="adJ"></div></div>
+<div class="asec"><h3>🛠️ Заявки на работу</h3><div id="adJ"></div></div>
 <div class="asec"><h3>📦 Все заказы</h3><div id="adAl"></div></div>
-<div class="asec"><h3>⚙️ Ставки</h3><div style="display:flex;gap:4px;flex-wrap:wrap;align-items:flex-end"><div class="ig" style="flex:1"><label>Дост/блок</label><input type="number" id="rtD" step="0.01"></div><div class="ig" style="flex:1"><label>Такси/блок</label><input type="number" id="rtT" step="0.01"></div><button class="btn btn-p btn-s" onclick="svRt()">✓</button></div></div>
+<div class="asec"><h3>⚙️ Ставки</h3><div style="display:flex;gap:6px;flex-wrap:wrap;align-items:flex-end"><div class="ig" style="flex:1"><label>Дост/блок</label><input type="number" id="rtD" step="0.01"></div><div class="ig" style="flex:1"><label>Такси/блок</label><input type="number" id="rtT" step="0.01"></div><button class="btn btn-p btn-s" onclick="svRt()">✓</button></div></div>
 </div>
 
 <div class="profile-overlay h" id="prOv"><div class="profile-box" id="prBox"></div></div>
-<div class="modal h" id="aSM"><div class="mbox"><h3>🏪 Новый магазин</h3><div class="ig"><label>Название</label><input type="text" id="nsN"></div><div class="ig"><label>Иконка / Картинка URL</label><input type="text" id="nsI"></div><div class="ig"><label>Обложка URL</label><input type="text" id="nsIm"></div><div class="ig"><label>Описание</label><textarea id="nsD" rows="2"></textarea></div><div style="display:flex;gap:4px"><div class="ig" style="flex:1"><label>X</label><input type="number" id="nsX"></div><div class="ig" style="flex:1"><label>Z</label><input type="number" id="nsZ"></div></div><div class="sl">Товары</div><div id="nsIL"></div><button class="btn btn-o btn-s" style="margin-bottom:8px" onclick="aNsI()">+</button><div style="display:flex;gap:4px"><button class="btn btn-p" style="flex:1" onclick="svShop()">✓</button><button class="btn btn-o" onclick="cls('aSM')">×</button></div></div></div>
+<div class="modal h" id="aSM"><div class="mbox"><h3>🏪 Новый магазин</h3>
+<div class="ig"><label>Название</label><input id="nsN"></div>
+<div class="ig"><label>Иконка магазина</label><input id="nsI" placeholder="🏪"></div>
+<div class="ig"><label>Обложка URL</label><input id="nsIm" placeholder="https://..."></div>
+<div class="ig"><label>Описание</label><textarea id="nsD" rows="2"></textarea></div>
+<div style="display:flex;gap:6px"><div class="ig" style="flex:1"><label>X</label><input type="number" id="nsX"></div><div class="ig" style="flex:1"><label>Z</label><input type="number" id="nsZ"></div></div>
+<div class="sl">Товары (иконка/URL · название · цена · кол-во)</div>
+<div id="nsIL"></div>
+<button class="btn btn-o btn-s" style="margin-bottom:8px" onclick="aNsI()">+ Товар</button>
+<div style="display:flex;gap:6px"><button class="btn btn-p" style="flex:1" onclick="svShop()">Сохранить</button><button class="btn btn-o" onclick="cls('aSM')">×</button></div>
+</div></div>
 <div class="modal h" id="eSM"><div class="mbox"><h3>✏️ Редактировать</h3><div id="esC"></div></div></div>
-
-<div class="modal h" id="chatM">
-    <div class="chat-box">
-        <h3 id="chatTitle" style="font-size:14px;border-bottom:1px solid var(--b);padding-bottom:8px;margin-bottom:8px" data-t="chat">💬 Чат</h3>
-        <div class="chat-msgs" id="chatList"></div>
-        <div style="display:flex;gap:6px">
-            <input type="text" id="chatInput" placeholder="..." style="flex:1;padding:8px;border-radius:6px;border:1px solid var(--b);background:var(--ci);color:white;font-size:12px;outline:none" onkeypress="if(event.key==='Enter')sendChat()">
-            <button class="btn btn-p" onclick="sendChat()">➤</button>
-            <button class="btn btn-o" onclick="closeChat()">×</button>
-        </div>
-    </div>
-</div>
-
+<div class="modal h" id="chatM"><div class="chat-box"><h3 style="margin-bottom:8px;font-size:14px">💬 Чат</h3><div class="chat-msgs" id="chatList"></div><div style="display:flex;gap:6px"><input id="chatInput" style="flex:1;padding:8px;border-radius:6px;border:1px solid var(--b);background:var(--ci);color:#fff" onkeypress="if(event.key==='Enter')sendChat()"><button class="btn btn-p" onclick="sendChat()">➤</button><button class="btn btn-o" onclick="closeChat()">×</button></div></div></div>
 <div class="toast" id="toast"></div>
 <script>
-const A='Sasasaco',CUR='https://i.imgur.com/mxv6EO1.png';
-const EJS_P='ZMjpoVTdX4JGOk0c3',EJS_S='RAP',EJS_T='template_ysm73gf';
+// ========== CONFIG (всё объявляется ОДИН раз) ==========
+const A = 'Sasasaco';
+const CUR = 'https://i.imgur.com/mxv6EO1.png';
+const EJS_P = 'ZMjpoVTdX4JGOk0c3';
+const EJS_S = 'RAP';
+const EJS_T = 'template_ysm73gf';
+
 emailjs.init(EJS_P);
 
-const firebaseConfig={
-  apiKey:"AIzaSyDiC2zc2vo5waPkFasoXuSf3ua-oJRbE40",
-  authDomain:"rap-webcraft.firebaseapp.com",
-  projectId:"rap-webcraft",
-  storageBucket:"rap-webcraft.firebasestorage.app",
-  messagingSenderId:"587398378699",
-  appId:"1:587398378699:web:3d6b0b064898a70fea974e"
+const firebaseConfig = {
+  apiKey: "AIzaSyDiC2zc2vo5waPkFasoXuSf3ua-oJRbE40",
+  authDomain: "rap-webcraft.firebaseapp.com",
+  projectId: "rap-webcraft",
+  storageBucket: "rap-webcraft.firebasestorage.app",
+  messagingSenderId: "587398378699",
+  appId: "1:587398378699:web:3d6b0b064898a70fea974e"
 };
 firebase.initializeApp(firebaseConfig);
-const fdb=firebase.firestore();
+const fdb = firebase.firestore();
 
-const LANGS={
-ru:{auth_sub:'Доставка · Такси · Банк',login_tab:'Вход',reg_tab:'Регистрация',reset_tab:'Забыл',nick_label:'Minecraft ник',pass_label:'Пароль',pass2_label:'Повторите',email_label:'Google почта',login_btn:'Войти ⛏️',reg_btn:'Создать',reset_btn:'Сбросить пароль',code_sent:'Код отправлен на',code_label:'Код из письма',verify_btn:'Подтвердить ✓',resend_btn:'Повторно',logout:'Выйти',tab_del:'📦 Доставка',tab_taxi:'🚀 Такси',tab_bank:'🏦 Банк',tab_orders:'📋 Заказы',tab_work:'💼 Работа',del_title:'📦 Доставка',del_sub:'Магазин → товары → точка → заказ',shops:'🏪 Магазины',cart:'🛒 Корзина',delivery_fee:'🚚 Доставка',total:'Итого:',pick_point:'📍 Точка доставки',payment:'💳 Оплата',online:'Онлайн',cash:'🤝 Наличные',comment:'Комментарий',place_order:'Оформить 📦',taxi_title:'🚀 Такси',taxi_sub:'Элитра-экспресс',bank_title:'🏦 RAP Bank',balance:'Баланс',transfer:'Перевод',to_whom:'Кому',amount:'Сумма',history:'📜 История',orders_title:'📋 Заказы',work_title:'💼 Работа',avail_del:'📦 Доставки',avail_taxi:'🚀 Такси',my_active:'✅ Активные',no_data:'Нет данных',no_shops:'Нет магазинов',empty_cart:'Корзина пуста!',pick_map:'Введи координаты или выбери игрока!',not_enough:'Не хватает средств!',order_placed:'Заказ оформлен!',pick_both:'Введи координаты или выбери игрока!',taxi_ordered:'Такси вызвано!',cant_self:'Нельзя себе',not_found:'Не найден',sent:'Отправлено!',saved:'Сохранено!',accepted:'Принят!',completed:'Завершён!',taken:'Уже занят!',apply_profile:'Подай заявку в профиле',need_elite:'Нужна Элита!',already_applied:'Уже подана',application_sent:'Заявка отправлена!',from:'Откуда (забрать)',to:'Куда (привезти)',call_taxi:'Вызвать 🚀',driver:'Доставщик',taxidriver:'Таксист',locs:'Локации',overworld:'🌍 Мир',nether:'🔥 Ад',end:'🌌 Энд',work_section:'Работа',close:'Закрыть',become_driver:'📦 Стать доставщиком',become_taxi:'🚀 Стать таксистом',accept_order:'✅ Принять',in_transit:'🚚 В пути',complete:'✅ Завершить',reward:'Награда',chat:'💬 Чат',reset_sent:'Новый пароль отправлен!'},
-en:{auth_sub:'Delivery · Taxi · Bank',login_tab:'Login',reg_tab:'Register',reset_tab:'Forgot',nick_label:'Minecraft nick',pass_label:'Password',pass2_label:'Repeat',email_label:'Google email',login_btn:'Login ⛏️',reg_btn:'Create',reset_btn:'Reset password',code_sent:'Code sent to',code_label:'Code from email',verify_btn:'Confirm ✓',resend_btn:'Resend',logout:'Logout',tab_del:'📦 Delivery',tab_taxi:'🚀 Taxi',tab_bank:'🏦 Bank',tab_orders:'📋 Orders',tab_work:'💼 Work',del_title:'📦 Delivery',del_sub:'Shop → items → point → order',shops:'🏪 Shops',cart:'🛒 Cart',delivery_fee:'🚚 Delivery',total:'Total:',pick_point:'📍 Delivery point',payment:'💳 Payment',online:'Online',cash:'🤝 Cash',comment:'Comment',place_order:'Place order 📦',taxi_title:'🚀 Taxi',taxi_sub:'Elytra express',bank_title:'🏦 RAP Bank',balance:'Balance',transfer:'Transfer',to_whom:'To',amount:'Amount',history:'📜 History',orders_title:'📋 Orders',work_title:'💼 Work',avail_del:'📦 Deliveries',avail_taxi:'🚀 Taxi',my_active:'✅ Active',no_data:'No data',no_shops:'No shops',empty_cart:'Cart empty!',pick_map:'Enter coords or pick player!',not_enough:'Not enough funds!',order_placed:'Order placed!',pick_both:'Enter coords or pick player!',taxi_ordered:'Taxi ordered!',cant_self:'Can\'t to self',not_found:'Not found',sent:'Sent!',saved:'Saved!',accepted:'Accepted!',completed:'Done!',taken:'Taken!',apply_profile:'Apply in profile',need_elite:'Need Elite!',already_applied:'Already applied',application_sent:'Applied!',from:'From',to:'To',call_taxi:'Call 🚀',driver:'Driver',taxidriver:'Taxi',locs:'Locations',overworld:'🌍 World',nether:'🔥 Nether',end:'🌌 End',work_section:'Work',close:'Close',become_driver:'📦 Become driver',become_taxi:'🚀 Become taxi',accept_order:'✅ Accept',in_transit:'🚚 In transit',complete:'✅ Complete',reward:'Reward',chat:'💬 Chat',reset_sent:'New password sent!'}
-};
+// ========== STATE ==========
+let U = null;
+let cart = [];
+let payM = 'online';
+let taxPayM = 'online'; // только один раз!
+let pendR = null;
+let nsIt = [];
+let loginPending = null;
+let pendingCode = null;
+let currentTab = 'delivery';
+let dbUsers = {};
+let dbShops = [];
+let dbOrders = [];
+let dbJobApps = [];
+let dbRates = { d: 0.05, t: 0.03 };
+let dbOwners = {};
+let currentChatDoc = null;
+let chatUnsub = null;
+let serverOnlineNicks = new Set(); // ники с mc-webcraft онлайн
+let curLang = localStorage.getItem('rap_lang') || 'ru';
 
-let curLang=localStorage.getItem('rap_lang')||'ru';
-function T(k){return LANGS[curLang]?.[k]||LANGS.ru[k]||k}
-function setLang(l){curLang=l;localStorage.setItem('rap_lang',l);document.querySelectorAll('.lang-sel').forEach(s=>s.value=l);document.querySelectorAll('[data-t]').forEach(el=>{const k=el.dataset.t;if(LANGS[l]?.[k])el.textContent=LANGS[l][k]});if(U)renderAll()}
-
-let U=null,cart=[],payM='online',taxPayM='online',pendR=null,nsIt=[],loginPending=null,pendingCode=null,currentTab='delivery';
-let dbUsers={},dbShops=[],dbOrders=[],dbJobApps=[],dbRates={d:.05,t:.03},dbOwners={},currentChatDoc=null,chatUnsub=null;
-
-const ACtx=window.AudioContext||window.webkitAudioContext;let ac;
-function snd(t){try{if(!ac)ac=new ACtx();const o=ac.createOscillator(),g=ac.createGain();o.connect(g);g.connect(ac.destination);g.gain.value=.04;if(t==='c'){o.frequency.value=800;o.start();o.stop(ac.currentTime+.03)}else if(t==='ok'){o.frequency.value=523;o.start();setTimeout(()=>o.frequency.value=784,100);o.stop(ac.currentTime+.2)}else if(t==='e'){o.frequency.value=200;o.type='square';o.start();o.stop(ac.currentTime+.1)}else if(t==='coin'){o.frequency.value=1200;o.start();setTimeout(()=>o.frequency.value=1600,50);o.stop(ac.currentTime+.08)}else if(t==='ord'){o.frequency.value=440;o.type='triangle';o.start();setTimeout(()=>o.frequency.value=659,120);o.stop(ac.currentTime+.25)}}catch(x){}}
-
-function cH(s){return`<img src="${CUR}" style="width:${s||14}px;height:${s||14}px;vertical-align:middle;image-rendering:pixelated" onerror="this.outerHTML='💎'">`}
-function isUrl(str){return str.startsWith('http://')||str.startsWith('https://')}
-function rIcon(ic){return isUrl(ic)?`<img src="${ic}" style="width:100%;height:100%;object-fit:cover;border-radius:10px" onerror="this.outerHTML='📦'">`:ic}
-function v(id){return document.getElementById(id)?.value?.trim()||''}
-function sh(id){const e=document.getElementById(id);if(e)e.classList.remove('h')}
-function hd(id){const e=document.getElementById(id);if(e)e.classList.add('h')}
-function cls(id){hd(id)}
-function toast(m,e){const t=document.getElementById('toast');t.textContent=m;t.className='toast'+(e?' err':'');t.classList.add('show');setTimeout(()=>t.classList.remove('show'),3200)}
-function showE(id,m){const e=document.getElementById(id);if(!e)return;e.textContent=m;e.style.display='block';snd('e');setTimeout(()=>e.style.display='none',4000)}
-function pSkin(id){const n=document.getElementById(id)?.value?.trim();document.getElementById('aAv').innerHTML=n?`<img src="https://mc-heads.net/avatar/${n}/56" onerror="this.parentElement.innerHTML='⛏️'">`:'⛏️'}
-function genCode(){return String(Math.floor(100000+Math.random()*900000))}
-function genPass(){return Math.random().toString(36).slice(-8)}
-function isAdm(){return U && U.nick && U.nick.toLowerCase()===A.toLowerCase()}
-function tAgo(ts){if(!ts)return'—';const d=Date.now()-ts;if(d<6e4)return'🟢';if(d<36e5)return Math.floor(d/6e4)+'м';if(d<864e5)return Math.floor(d/36e5)+'ч';return Math.floor(d/864e5)+'д'}
-
-async function sendMail(email,nick,code,customSubject){
-  try{await emailjs.send(EJS_S,EJS_T,{to_email:email,email:email,code:code,nick:nick,message:customSubject||`RAP Code: ${code}`});return true}
-  catch(e){console.warn(e);toast(`⚠️ Код: ${code}`);return true}
+// ========== UTILS ==========
+function T(k){ return k; }
+function setLang(l){
+  curLang = l;
+  localStorage.setItem('rap_lang', l);
+  document.querySelectorAll('.lang-sel').forEach(s => s.value = l);
+}
+function v(id){ return (document.getElementById(id)?.value || '').trim(); }
+function sh(id){ document.getElementById(id)?.classList.remove('h'); }
+function hd(id){ document.getElementById(id)?.classList.add('h'); }
+function cls(id){ hd(id); }
+function toast(m, err){
+  const t = document.getElementById('toast');
+  if(!t) return;
+  t.textContent = m;
+  t.className = 'toast' + (err ? ' err' : '');
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 3200);
+}
+function showE(id, m){
+  const e = document.getElementById(id);
+  if(!e) return;
+  e.textContent = m;
+  e.style.display = 'block';
+  snd('e');
+  setTimeout(() => e.style.display = 'none', 4000);
+}
+function pSkin(id){
+  const n = document.getElementById(id)?.value?.trim();
+  const el = document.getElementById('aAv');
+  if(!el) return;
+  el.innerHTML = n
+    ? `<img src="https://mc-heads.net/avatar/${encodeURIComponent(n)}/52" onerror="this.parentElement.innerHTML='⛏️'">`
+    : '⛏️';
+}
+function genCode(){ return String(Math.floor(100000 + Math.random() * 900000)); }
+function genPass(){ return Math.random().toString(36).slice(-8); }
+function isAdm(){ return !!(U && U.nick && U.nick.toLowerCase() === A.toLowerCase()); }
+function isUrl(s){ return typeof s === 'string' && (s.startsWith('http://') || s.startsWith('https://')); }
+function rIcon(ic){
+  if(isUrl(ic)) return `<img src="${ic}" alt="" onerror="this.parentElement.innerHTML='📦'">`;
+  return ic || '📦';
+}
+function cH(s){
+  return `<img src="${CUR}" style="width:${s||14}px;height:${s||14}px;vertical-align:middle;image-rendering:pixelated" onerror="this.outerHTML='💎'">`;
+}
+function bal(n){ return Math.floor(Number(n) || 0); }
+function tAgo(ts){
+  if(!ts) return '—';
+  const d = Date.now() - ts;
+  if(d < 60000) return 'сейчас';
+  if(d < 3600000) return Math.floor(d/60000) + 'м';
+  if(d < 86400000) return Math.floor(d/3600000) + 'ч';
+  return Math.floor(d/86400000) + 'д';
+}
+function hideLoad(){
+  const el = document.getElementById('loadScr');
+  if(el) el.style.display = 'none';
+}
+function fs(id){
+  const el = document.getElementById(id);
+  if(el?.requestFullscreen) el.requestFullscreen();
 }
 
-// ОНЛАЙН ИГРОКИ С СЕРВЕРА
+// audio
+const ACtx = window.AudioContext || window.webkitAudioContext;
+let ac;
+function snd(t){
+  try{
+    if(!ac) ac = new ACtx();
+    const o = ac.createOscillator(), g = ac.createGain();
+    o.connect(g); g.connect(ac.destination); g.gain.value = 0.04;
+    if(t==='c'){ o.frequency.value=800; o.start(); o.stop(ac.currentTime+.03); }
+    else if(t==='ok'){ o.frequency.value=523; o.start(); setTimeout(()=>o.frequency.value=784,100); o.stop(ac.currentTime+.2); }
+    else if(t==='e'){ o.frequency.value=200; o.type='square'; o.start(); o.stop(ac.currentTime+.1); }
+    else if(t==='coin'){ o.frequency.value=1200; o.start(); setTimeout(()=>o.frequency.value=1600,50); o.stop(ac.currentTime+.08); }
+    else if(t==='ord'){ o.frequency.value=440; o.type='triangle'; o.start(); setTimeout(()=>o.frequency.value=659,120); o.stop(ac.currentTime+.25); }
+  }catch(e){}
+}
+
+async function sendMail(email, nick, code, msg){
+  try{
+    await emailjs.send(EJS_S, EJS_T, {
+      to_email: email, email, code, nick,
+      message: msg || (`RAP код: ${code}`)
+    });
+    return true;
+  }catch(e){
+    console.warn(e);
+    toast('⚠️ Код: ' + code);
+    return true; // не блокируем вход
+  }
+}
+
+// ========== ONLINE PLAYERS (mc-webcraft) ==========
 async function getOnlinePlayers(){
   toast('Загрузка онлайна...');
   try{
-    const r=await fetch('https://mc-webcraft.ru/wp-json/webcraft/v1/online');
-    const raw=await r.json();
-    let list=[];
-    if(Array.isArray(raw)) list=raw;
-    else if(raw && typeof raw==='object') list=raw.players||raw.data||raw.list||Object.values(raw);
-    
-    const parsedPlayers=list.map(item=>{
-      if(typeof item==='string') return {nick:item,x:null,z:null};
-      if(item && typeof item==='object'){
-        const nick=item.name||item.nick||item.player||item.username||item.id||'Игрок';
-        const x=item.x!==undefined?Math.round(item.x):(item.location?.x?Math.round(item.location.x):null);
-        const z=item.z!==undefined?Math.round(item.z):(item.location?.z?Math.round(item.location.z):null);
-        return {nick,x,z};
-      }
-      return {nick:String(item),x:null,z:null};
-    }).filter(p=>p.nick && p.nick!=='[object Object]');
+    const r = await fetch('https://mc-webcraft.ru/wp-json/webcraft/v1/online');
+    const raw = await r.json();
+    let list = [];
+    if(Array.isArray(raw)) list = raw;
+    else if(raw && typeof raw === 'object'){
+      list = raw.players || raw.data || raw.list || Object.values(raw);
+    }
 
-    const opts=parsedPlayers.map(p=>`<option value="${p.nick}" data-x="${p.x!==null?p.x:''}" data-z="${p.z!==null?p.z:''}">${p.nick} ${p.x!==null?`(X:${p.x} Z:${p.z})`:''}</option>`).join('');
-    
-    document.querySelectorAll('.online-select').forEach(sel=>{
-      sel.innerHTML=`<option value="">— Выбери игрока (${parsedPlayers.length} онлайн) —</option>`+opts;
+    const parsed = list.map(item => {
+      if(typeof item === 'string') return { nick: item, x: null, z: null };
+      if(item && typeof item === 'object'){
+        const nick = item.name || item.nick || item.player || item.username || item.id || '';
+        const x = item.x != null ? Math.round(+item.x) : (item.location?.x != null ? Math.round(+item.location.x) : null);
+        const z = item.z != null ? Math.round(+item.z) : (item.location?.z != null ? Math.round(+item.location.z) : null);
+        return { nick: String(nick), x, z };
+      }
+      return { nick: '', x: null, z: null };
+    }).filter(p => p.nick && p.nick !== '[object Object]');
+
+    serverOnlineNicks = new Set(parsed.map(p => p.nick.toLowerCase()));
+
+    const opts = parsed.map(p =>
+      `<option value="${p.nick.replace(/"/g,'&quot;')}" data-x="${p.x??''}" data-z="${p.z??''}">${p.nick}${p.x!=null?` (X:${p.x} Z:${p.z})`:''}</option>`
+    ).join('');
+
+    document.querySelectorAll('.online-select').forEach(sel => {
+      sel.innerHTML = `<option value="">— Игрок (${parsed.length} онлайн) —</option>` + opts;
     });
-    toast(`✅ Загружено ${parsedPlayers.length} игроков!`);
-  }catch(e){console.error(e);toast('Не удалось загрузить онлайн',1)}
+
+    // обновить бейджи онлайна в админке/профиле если открыты
+    if(isAdm()) rAdU();
+    toast('✅ ' + parsed.length + ' игроков онлайн');
+  }catch(e){
+    console.error(e);
+    toast('Не удалось загрузить онлайн', 1);
+  }
 }
 
-document.addEventListener('change', function(e) {
-  if(e.target && e.target.classList.contains('online-select')) {
-    const opt=e.target.options[e.target.selectedIndex];
-    const x=opt.getAttribute('data-x'), z=opt.getAttribute('data-z'), nick=e.target.value;
-    if(x && z && x!=='' && z!=='') {
-      if(e.target.id==='delPlr'){ document.getElementById('delX').value=x; document.getElementById('delZ').value=z; uDCC(); }
-      else if(e.target.id==='taxPlr'){ document.getElementById('txFX').value=x; document.getElementById('txFZ').value=z; cTxP(); } // В такси ставим в "Откуда"
-      toast(`📍 Координаты ${nick} подставлены!`);
-    }
+document.addEventListener('change', function(e){
+  if(!e.target?.classList?.contains('online-select')) return;
+  const opt = e.target.options[e.target.selectedIndex];
+  if(!opt) return;
+  const x = opt.getAttribute('data-x');
+  const z = opt.getAttribute('data-z');
+  const nick = e.target.value;
+  if(!nick) return;
+
+  // delPlr = точка доставки (куда)
+  if(e.target.id === 'delPlr'){
+    if(x !== '' && z !== '' && x != null && z != null){
+      document.getElementById('delX').value = x;
+      document.getElementById('delZ').value = z;
+      uDCC();
+      toast('📍 Куда: ' + nick + ' X:' + x + ' Z:' + z);
+    } else toast('Выбран ' + nick + ' (корды не пришли — введи вручную)');
+  }
+
+  // taxPlr = ОТКУДА забрать (корды игрока)
+  if(e.target.id === 'taxPlr'){
+    if(x !== '' && z !== '' && x != null && z != null){
+      document.getElementById('txFX').value = x;
+      document.getElementById('txFZ').value = z;
+      cTxP();
+      toast('📍 Откуда: ' + nick + ' X:' + x + ' Z:' + z);
+    } else toast('Выбран ' + nick + ' (корды откуда введи вручную)');
   }
 });
 
-// FIREBASE
-function initFirebase(){
-  document.getElementById('loadScr').style.display='flex';
-  fdb.collection('config').doc('settings').onSnapshot(doc=>{if(doc.exists){const d=doc.data();if(d.rates)dbRates=d.rates;if(d.owners)dbOwners=d.owners;}});
-  fdb.collection('shops').onSnapshot(snap=>{dbShops=[];snap.forEach(doc=>dbShops.push({docId:doc.id,...doc.data()}));if(U){rDS();if(isAdm())rAdS()}});
-  fdb.collection('orders').orderBy('id','desc').onSnapshot(snap=>{dbOrders=[];snap.forEach(doc=>dbOrders.push({docId:doc.id,...doc.data()}));if(U){rOr();rWork();if(isAdm()){rAdP();rAdA()}}});
-  fdb.collection('jobApps').onSnapshot(snap=>{dbJobApps=[];snap.forEach(doc=>dbJobApps.push({docId:doc.id,...doc.data()}));if(U&&isAdm())rJA()});
-  fdb.collection('users').onSnapshot(snap=>{dbUsers={};snap.forEach(doc=>{dbUsers[doc.id]=doc.data()});if(U&&isAdm())rAdU()});
-  setTimeout(()=>{document.getElementById('loadScr').style.display='none'},1000);
+function isServerOnline(nick){
+  return serverOnlineNicks.has(String(nick||'').toLowerCase());
 }
 
-// AUTH
+// ========== FIREBASE ==========
+function initFirebase(){
+  try{
+    fdb.collection('config').doc('settings').onSnapshot(doc => {
+      if(doc.exists){
+        const d = doc.data();
+        if(d.rates) dbRates = d.rates;
+        if(d.owners) dbOwners = d.owners;
+      }
+    }, err => console.warn(err));
+
+    fdb.collection('shops').onSnapshot(snap => {
+      dbShops = [];
+      snap.forEach(doc => dbShops.push({ docId: doc.id, ...doc.data() }));
+      if(U){ rDS(); if(isAdm()) rAdS(); }
+    }, err => console.warn(err));
+
+    fdb.collection('orders').orderBy('id','desc').onSnapshot(snap => {
+      dbOrders = [];
+      snap.forEach(doc => dbOrders.push({ docId: doc.id, ...doc.data() }));
+      if(U){ rOr(); rWork(); updWorkNotif(); if(isAdm()){ rAdP(); rAdA(); } }
+    }, err => console.warn(err));
+
+    fdb.collection('jobApps').onSnapshot(snap => {
+      dbJobApps = [];
+      snap.forEach(doc => dbJobApps.push({ docId: doc.id, ...doc.data() }));
+      if(U && isAdm()) rJA();
+    }, err => console.warn(err));
+
+    fdb.collection('users').onSnapshot(snap => {
+      dbUsers = {};
+      snap.forEach(doc => { dbUsers[doc.id] = doc.data(); });
+      if(U && isAdm()) rAdU();
+    }, err => console.warn(err));
+  }catch(e){
+    console.error(e);
+    toast('Ошибка Firebase', 1);
+  } finally {
+    hideLoad();
+  }
+}
+
+// ========== AUTH ==========
 function aTab(t){
-  document.querySelectorAll('.atab').forEach((b,i)=>b.classList.toggle('on',(t==='login'&&i===0)||(t==='reg'&&i===1)||(t==='reset'&&i===2)));
+  document.querySelectorAll('.atab').forEach((b,i)=>b.classList.toggle('on',
+    (t==='login'&&i===0)||(t==='reg'&&i===1)||(t==='reset'&&i===2)));
   document.querySelectorAll('.af').forEach(f=>f.classList.remove('on'));
-  document.getElementById('f-'+t).classList.add('on');snd('c');
+  document.getElementById('f-'+t)?.classList.add('on');
+  snd('c');
 }
 
 async function doReg(){
-  const n=v('rN'),em=v('rE'),p=v('rP'),p2=v('rP2');
-  if(!n)return showE('rErr','Введи ник!');
-  if(!em||!em.includes('@'))return showE('rErr','Введи почту!');
-  if(p.length<4)return showE('rErr','Мин. 4 символа!');
-  if(p!==p2)return showE('rErr','Пароли ≠');
-  const btn=document.getElementById('regBtn');btn.disabled=true;btn.innerHTML='<span class="spinner"></span>';
+  const n=v('rN'), em=v('rE'), p=v('rP'), p2=v('rP2');
+  if(!n) return showE('rErr','Введи ник!');
+  if(!em.includes('@')) return showE('rErr','Введи почту!');
+  if(p.length<4) return showE('rErr','Мин. 4 символа!');
+  if(p!==p2) return showE('rErr','Пароли не совпадают!');
+  const btn=document.getElementById('regBtn');
+  btn.disabled=true; btn.innerHTML='<span class="spinner"></span>';
   try{
     const uDoc=await fdb.collection('users').doc(n).get();
-    if(uDoc.exists){btn.disabled=false;btn.textContent=T('reg_btn');return showE('rErr','Ник занят!')}
-    const code=genCode();pendR={n,em,p,mode:'reg'};pendingCode=code;
+    if(uDoc.exists){ btn.disabled=false; btn.textContent='Создать'; return showE('rErr','Ник занят!'); }
+    const code=genCode();
+    pendR={n,em,p,mode:'reg'}; pendingCode=code;
     await sendMail(em,n,code);
-    btn.disabled=false;btn.textContent=T('reg_btn');
+    btn.disabled=false; btn.textContent='Создать';
     document.querySelectorAll('.af').forEach(f=>f.classList.remove('on'));
     document.getElementById('f-verify').classList.add('on');
-    document.getElementById('vEm').textContent=em;toast(T('code_sent')+' '+em);
-  }catch(err){btn.disabled=false;btn.textContent=T('reg_btn');showE('rErr','Ошибка: '+err.message)}
+    document.getElementById('vEm').textContent=em;
+    toast('Код отправлен!');
+  }catch(err){
+    btn.disabled=false; btn.textContent='Создать';
+    showE('rErr','Ошибка: '+err.message);
+  }
 }
 
 async function doLogin(){
-  const n=v('lN'),p=v('lP');if(!n||!p)return showE('lE','Заполни поля!');
-  const btn=document.getElementById('loginBtn');btn.disabled=true;btn.innerHTML='<span class="spinner"></span>';
+  const n=v('lN'), p=v('lP');
+  if(!n||!p) return showE('lE','Заполни поля!');
+  const btn=document.getElementById('loginBtn');
+  btn.disabled=true; btn.innerHTML='<span class="spinner"></span>';
   try{
+    // автосоздание админа
     if(n.toLowerCase()===A.toLowerCase()){
       const aDoc=await fdb.collection('users').doc(A).get();
       if(!aDoc.exists){
         await fdb.collection('users').doc(A).set({
-          nick:A,email:'sasasaco64@gmail.com',pass:'admin',type:'elite',balance:99999,
-          transactions:[],isDriver:true,isTaxiDriver:true,
-          locations:{overworld:{x:0,z:0},nether:{x:0,z:0},end:{x:0,z:0}},lastOnline:Date.now()
+          nick:A, email:'sasasaco64@gmail.com', pass:'admin', type:'elite', balance:99999,
+          transactions:[], isDriver:true, isTaxiDriver:true,
+          locations:{overworld:{x:0,z:0},nether:{x:0,z:0},end:{x:0,z:0}},
+          lastOnline:Date.now()
         });
       }
     }
+
     let uDoc=await fdb.collection('users').doc(n).get();
     if(!uDoc.exists){
-      const all=await fdb.collection('users').get();let found=null;
-      all.forEach(d=>{if(d.id.toLowerCase()===n.toLowerCase())found=d});
-      if(found) uDoc=found; else {btn.disabled=false;btn.textContent=T('login_btn');return showE('lE',T('not_found'))}
+      const all=await fdb.collection('users').get();
+      let found=null;
+      all.forEach(d=>{ if(d.id.toLowerCase()===n.toLowerCase()) found=d; });
+      if(found) uDoc=found;
+      else { btn.disabled=false; btn.textContent='Войти ⛏️'; return showE('lE','Не найден!'); }
     }
     const u=uDoc.data();
-    if(u.pass!==p){btn.disabled=false;btn.textContent=T('login_btn');return showE('lE','Неверный пароль!')}
-    
-    const code=genCode();loginPending=u;pendingCode=code;pendR={mode:'login'};
-    await sendMail(u.email||'sasasaco64@gmail.com',n,code);
-    btn.disabled=false;btn.textContent=T('login_btn');
+    if(u.pass!==p){ btn.disabled=false; btn.textContent='Войти ⛏️'; return showE('lE','Неверный пароль!'); }
+
+    const code=genCode();
+    loginPending=u; pendingCode=code; pendR={mode:'login'};
+    await sendMail(u.email||'sasasaco64@gmail.com', n, code);
+    btn.disabled=false; btn.textContent='Войти ⛏️';
     document.querySelectorAll('.af').forEach(f=>f.classList.remove('on'));
     document.getElementById('f-verify').classList.add('on');
-    document.getElementById('vEm').textContent=u.email;toast(T('code_sent')+'!');
-  }catch(err){btn.disabled=false;btn.textContent=T('login_btn');showE('lE','Ошибка: '+err.message)}
+    document.getElementById('vEm').textContent=u.email||'';
+    toast('Код отправлен!');
+  }catch(err){
+    btn.disabled=false; btn.textContent='Войти ⛏️';
+    showE('lE','Ошибка: '+err.message);
+  }
 }
 
 async function doReset(){
-  const n=v('rsN');if(!n)return showE('rsE','Введи ник!');
-  const btn=document.getElementById('rsBtn');btn.disabled=true;btn.innerHTML='<span class="spinner"></span>';
+  const n=v('rsN');
+  if(!n) return showE('rsE','Введи ник!');
+  const btn=document.getElementById('rsBtn');
+  btn.disabled=true; btn.innerHTML='<span class="spinner"></span>';
   try{
     let uDoc=await fdb.collection('users').doc(n).get();
     if(!uDoc.exists){
-      const all=await fdb.collection('users').get();let found=null;
-      all.forEach(d=>{if(d.id.toLowerCase()===n.toLowerCase())found=d});
-      if(found) uDoc=found; else {btn.disabled=false;btn.textContent=T('reset_btn');return showE('rsE',T('not_found'))}
+      const all=await fdb.collection('users').get();
+      let found=null;
+      all.forEach(d=>{ if(d.id.toLowerCase()===n.toLowerCase()) found=d; });
+      if(found) uDoc=found;
+      else { btn.disabled=false; btn.textContent='Сбросить пароль'; return showE('rsE','Не найден!'); }
     }
-    const u=uDoc.data();const newPass=genPass();
-    await sendMail(u.email,u.nick,newPass,`Новый пароль RAP: ${newPass}`);
-    await fdb.collection('users').doc(uDoc.id).update({pass:newPass});
-    btn.disabled=false;btn.textContent=T('reset_btn');
-    toast(T('reset_sent')+` Код: ${newPass}`);
-    aTab('login');document.getElementById('lN').value=u.nick;document.getElementById('lP').value=newPass;
-  }catch(err){btn.disabled=false;btn.textContent=T('reset_btn');showE('rsE','Ошибка: '+err.message)}
+    const u=uDoc.data();
+    const newPass=genPass();
+    await sendMail(u.email, u.nick, newPass, 'Новый пароль RAP: '+newPass);
+    await fdb.collection('users').doc(uDoc.id).update({ pass:newPass });
+    btn.disabled=false; btn.textContent='Сбросить пароль';
+    toast('Новый пароль: '+newPass);
+    aTab('login');
+    document.getElementById('lN').value=u.nick;
+    document.getElementById('lP').value=newPass;
+  }catch(err){
+    btn.disabled=false; btn.textContent='Сбросить пароль';
+    showE('rsE','Ошибка: '+err.message);
+  }
 }
 
 async function doVerify(){
-  const c=v('vC');if(!c)return showE('vE','Введи код!');if(c!==pendingCode)return showE('vE','Неверный код!');
+  const c=v('vC');
+  if(!c) return showE('vE','Введи код!');
+  if(c!==pendingCode) return showE('vE','Неверный код!');
   try{
     if(pendR?.mode==='reg'){
       await fdb.collection('users').doc(pendR.n).set({
-        nick:pendR.n,email:pendR.em,pass:pendR.p,type:'regular',balance:0,transactions:[],
-        isDriver:false,isTaxiDriver:false,
-        locations:{overworld:{x:0,z:0},nether:{x:0,z:0},end:{x:0,z:0}},lastOnline:Date.now()
+        nick:pendR.n, email:pendR.em, pass:pendR.p, type:'regular', balance:0,
+        transactions:[], isDriver:false, isTaxiDriver:false,
+        locations:{overworld:{x:0,z:0},nether:{x:0,z:0},end:{x:0,z:0}},
+        lastOnline:Date.now()
       });
-      pendR=null;pendingCode=null;snd('ok');toast('Аккаунт создан! Войди.');aTab('login');document.getElementById('vC').value='';return;
+      pendR=null; pendingCode=null;
+      snd('ok'); toast('Аккаунт создан! Войди.');
+      aTab('login'); document.getElementById('vC').value='';
+      return;
     }
-    if(pendR?.mode==='login'&&loginPending){
-      U=loginPending;loginPending=null;pendR=null;pendingCode=null;
-      localStorage.setItem('rap_usr',U.nick);
-      await fdb.collection('users').doc(U.nick).update({lastOnline:Date.now()});
-      enter();document.getElementById('vC').value='';
+    if(pendR?.mode==='login' && loginPending){
+      U=loginPending; loginPending=null; pendR=null; pendingCode=null;
+      localStorage.setItem('rap_usr', U.nick);
+      await fdb.collection('users').doc(U.nick).update({ lastOnline:Date.now() });
+      enter(); document.getElementById('vC').value='';
     }
-  }catch(err){showE('vE','Ошибка: '+err.message)}
+  }catch(err){ showE('vE','Ошибка: '+err.message); }
 }
 
 async function resendCode(){
-  if(!pendR)return;
-  const em=pendR.mode==='reg'?pendR.em:loginPending?.email;
-  const n=pendR.mode==='reg'?pendR.n:loginPending?.nick;
-  if(!em)return;
-  const code=genCode();pendingCode=code;
-  const btn=document.getElementById('resendBtn');btn.disabled=true;btn.innerHTML='<span class="spinner"></span>';
-  await sendMail(em,n,code);btn.disabled=false;btn.textContent=T('resend_btn');toast('Новый код отправлен!');
+  if(!pendR) return;
+  const em = pendR.mode==='reg' ? pendR.em : loginPending?.email;
+  const n = pendR.mode==='reg' ? pendR.n : loginPending?.nick;
+  if(!em) return;
+  const code=genCode(); pendingCode=code;
+  const btn=document.getElementById('resendBtn');
+  btn.disabled=true; btn.innerHTML='<span class="spinner"></span>';
+  await sendMail(em,n,code);
+  btn.disabled=false; btn.textContent='Повторно';
+  toast('Новый код отправлен!');
 }
 
 function enter(){
-  hd('authScr');document.getElementById('hdr').style.display='flex';sh('tC');
-  document.getElementById('hAv').src=`https://mc-heads.net/avatar/${U.nick}/26`;
-  document.getElementById('hNk').textContent=U.nick;uBal();
-  
+  hideLoad();
+  hd('authScr');
+  document.getElementById('hdr').style.display='flex';
+  sh('tC');
+  document.getElementById('hAv').src = `https://mc-heads.net/avatar/${encodeURIComponent(U.nick)}/26`;
+  document.getElementById('hNk').textContent = U.nick;
+  uBal();
+
+  // админ-вкладка только Sasasaco
   if(isAdm()){
-    document.getElementById('tA').style.display='inline-flex';
-    document.getElementById('hAd').style.display='inline-block';
-    document.getElementById('hAd').classList.remove('h');
+    const tA=document.getElementById('tA');
+    tA.classList.remove('h'); tA.style.display='inline-flex';
+    const hAd=document.getElementById('hAd');
+    hAd.classList.remove('h'); hAd.style.display='inline-block';
   } else {
     document.getElementById('tA').style.display='none';
     document.getElementById('hAd').style.display='none';
   }
-  
-  if(U.isDriver||U.isTaxiDriver||isAdm()){document.getElementById('tW').style.display='inline-flex';document.getElementById('tW').classList.remove('h')}
-  else {document.getElementById('tW').style.display='none'}
-  
+
+  if(U.isDriver || U.isTaxiDriver || isAdm()){
+    const tW=document.getElementById('tW');
+    tW.classList.remove('h'); tW.style.display='inline-flex';
+  } else {
+    document.getElementById('tW').style.display='none';
+  }
+
   fdb.collection('users').doc(U.nick).onSnapshot(d=>{
     if(d.exists){
-      U=d.data();uBal();
-      if(U.isDriver||U.isTaxiDriver||isAdm()){document.getElementById('tW').style.display='inline-flex';document.getElementById('tW').classList.remove('h')}
-      else{document.getElementById('tW').style.display='none'}
+      U = d.data();
+      uBal();
+      if(U.isDriver||U.isTaxiDriver||isAdm()){
+        document.getElementById('tW').style.display='inline-flex';
+        document.getElementById('tW').classList.remove('h');
+      } else document.getElementById('tW').style.display='none';
     }
   });
-  
-  sTab('delivery',document.getElementById('tD'));
-  snd('ok');toast(`Привет, ${U.nick}!`);
+
+  // подтянуть онлайн сервера в фоне
+  getOnlinePlayers().catch(()=>{});
+
+  sTab('delivery', document.getElementById('tD'));
+  snd('ok');
+  toast('Привет, ' + U.nick + '!');
 }
 
 async function tryAuto(){
-  const s=localStorage.getItem('rap_usr');if(!s){document.getElementById('loadScr').style.display='none';return;}
+  const s = localStorage.getItem('rap_usr');
+  if(!s){ hideLoad(); sh('authScr'); return; }
   try{
-    const d=await fdb.collection('users').doc(s).get();if(!d.exists){document.getElementById('loadScr').style.display='none';return;}
-    U=d.data();await fdb.collection('users').doc(U.nick).update({lastOnline:Date.now()});enter();
-  }catch(e){console.warn(e);document.getElementById('loadScr').style.display='none';}
+    const d = await fdb.collection('users').doc(s).get();
+    if(!d.exists){ hideLoad(); sh('authScr'); return; }
+    U = d.data();
+    await fdb.collection('users').doc(U.nick).update({ lastOnline: Date.now() });
+    enter();
+  }catch(e){
+    console.warn(e);
+    hideLoad(); sh('authScr');
+  }
 }
 
 function logout(){
-  U=null;cart=[];localStorage.removeItem('rap_usr');
-  document.getElementById('authScr').classList.remove('h');
-  document.getElementById('hdr').style.display='none';hd('tC');
+  U=null; cart=[];
+  localStorage.removeItem('rap_usr');
+  sh('authScr');
+  document.getElementById('hdr').style.display='none';
+  hd('tC');
   document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
-  aTab('login');snd('c');
+  aTab('login'); snd('c');
 }
 
-function uBal(){if(U){document.getElementById('hBal').textContent=U.balance||0;const bB=document.getElementById('bB');if(bB)bB.textContent=U.balance||0}}
-setInterval(async()=>{if(U)await fdb.collection('users').doc(U.nick).update({lastOnline:Date.now()})},20000);
+function uBal(){
+  if(!U) return;
+  const b = bal(U.balance);
+  document.getElementById('hBal').textContent = b;
+  const bB = document.getElementById('bB');
+  if(bB) bB.textContent = b;
+}
 
-function renderAll(){if(!U)return;uBal();({delivery:rDS,taxi:rTx,bank:rBk,orders:rOr,work:rWork,admin:()=>{if(isAdm())rAd()}})[currentTab]?.()}
-setInterval(renderAll,5000);
+setInterval(async ()=>{
+  if(U){
+    try{ await fdb.collection('users').doc(U.nick).update({ lastOnline: Date.now() }); }catch(e){}
+  }
+}, 20000);
+
+function renderAll(){
+  if(!U) return;
+  uBal();
+  ({ delivery:rDS, taxi:rTx, bank:rBk, orders:rOr, work:rWork, admin:()=>{ if(isAdm()) rAd(); } })[currentTab]?.();
+}
+setInterval(renderAll, 8000);
 
 // PROFILE
 function openProf(){
-  if(!U)return;
-  const loc=U.locations||{};const ords=dbOrders.filter(o=>o.user===U.nick);const apps=dbJobApps.filter(a=>a.nick===U.nick);
-  document.getElementById('prBox').innerHTML=`
-    <img class="av-big" src="https://mc-heads.net/avatar/${U.nick}/64">
-    <h2>${U.nick}</h2>
-    <p class="em">${U.email||''} · ${U.type==='elite'?'⭐ Элита':'Обычный'}</p>
-    <div class="pstats">
-      <div class="stat"><div class="v">${U.balance||0}</div><div class="l">${T('balance')}</div></div>
-      <div class="stat"><div class="v">${ords.length}</div><div class="l">${T('orders_title')}</div></div>
+  if(!U) return;
+  const loc = U.locations || {};
+  const ords = dbOrders.filter(o=>o.user===U.nick);
+  const apps = dbJobApps.filter(a=>a.nick===U.nick);
+  const online = isServerOnline(U.nick);
+  document.getElementById('prBox').innerHTML = `
+    <img class="av-big" src="https://mc-heads.net/avatar/${encodeURIComponent(U.nick)}/64" style="width:64px;height:64px;border-radius:12px;display:block;margin:0 auto 8px;image-rendering:pixelated;border:2px solid var(--b)">
+    <h2 style="text-align:center">${U.nick}${online?' <span class="online-badge">🟢 на сервере</span>':''}</h2>
+    <p class="em" style="text-align:center;color:var(--tm);font-size:11px;margin-bottom:10px">${U.email||''} · ${U.type==='elite'?'⭐ Элита':'Обычный'}</p>
+    <div class="pstats" style="display:flex;gap:8px;margin-bottom:12px">
+      <div class="stat" style="flex:1;background:var(--ci);border:1px solid var(--b);border-radius:8px;padding:10px;text-align:center"><div class="v" style="font-size:18px;font-weight:800;color:var(--p)">${bal(U.balance)}</div><div class="l" style="font-size:9px;color:var(--tm)">БАЛАНС</div></div>
+      <div class="stat" style="flex:1;background:var(--ci);border:1px solid var(--b);border-radius:8px;padding:10px;text-align:center"><div class="v" style="font-size:18px;font-weight:800;color:var(--p)">${ords.length}</div><div class="l" style="font-size:9px;color:var(--tm)">ЗАКАЗЫ</div></div>
     </div>
-    <div class="psec"><h4>${T('locs')}</h4>
-      <div class="loc"><h5>${T('overworld')}</h5><div style="display:flex;gap:4px"><div class="ig" style="flex:1"><label>X</label><input type="number" id="lOX" value="${loc.overworld?.x||0}"></div><div class="ig" style="flex:1"><label>Z</label><input type="number" id="lOZ" value="${loc.overworld?.z||0}"></div></div></div>
-      <div class="loc"><h5>${T('nether')}</h5><div style="display:flex;gap:4px"><div class="ig" style="flex:1"><label>X</label><input type="number" id="lNX" value="${loc.nether?.x||0}"></div><div class="ig" style="flex:1"><label>Z</label><input type="number" id="lNZ" value="${loc.nether?.z||0}"></div></div></div>
-      <div class="loc"><h5>${T('end')}</h5><div style="display:flex;gap:4px"><div class="ig" style="flex:1"><label>X</label><input type="number" id="lEX" value="${loc.end?.x||0}"></div><div class="ig" style="flex:1"><label>Z</label><input type="number" id="lEZ" value="${loc.end?.z||0}"></div></div></div>
-      <button class="btn btn-p btn-s" style="margin-top:4px" onclick="svLoc()">${T('saved')}</button>
+    <div class="psec"><h4 style="font-size:12px;margin-bottom:6px;border-bottom:1px solid var(--b);padding-bottom:4px">Локации</h4>
+      <div class="loc" style="background:var(--ci);border:1px solid var(--b);border-radius:8px;padding:8px;margin-bottom:6px"><h5>🌍 Мир</h5><div style="display:flex;gap:4px"><div class="ig" style="flex:1"><label>X</label><input type="number" id="lOX" value="${loc.overworld?.x||0}"></div><div class="ig" style="flex:1"><label>Z</label><input type="number" id="lOZ" value="${loc.overworld?.z||0}"></div></div></div>
+      <div class="loc" style="background:var(--ci);border:1px solid var(--b);border-radius:8px;padding:8px;margin-bottom:6px"><h5>🔥 Ад</h5><div style="display:flex;gap:4px"><div class="ig" style="flex:1"><label>X</label><input type="number" id="lNX" value="${loc.nether?.x||0}"></div><div class="ig" style="flex:1"><label>Z</label><input type="number" id="lNZ" value="${loc.nether?.z||0}"></div></div></div>
+      <div class="loc" style="background:var(--ci);border:1px solid var(--b);border-radius:8px;padding:8px;margin-bottom:6px"><h5>🌌 Энд</h5><div style="display:flex;gap:4px"><div class="ig" style="flex:1"><label>X</label><input type="number" id="lEX" value="${loc.end?.x||0}"></div><div class="ig" style="flex:1"><label>Z</label><input type="number" id="lEZ" value="${loc.end?.z||0}"></div></div></div>
+      <button class="btn btn-p btn-s" style="margin-top:4px" onclick="svLoc()">Сохранить</button>
     </div>
-    <div class="psec"><h4>${T('work_section')}</h4>
-      <p class="m" style="margin-bottom:4px">${U.isDriver?'✅ '+T('driver'):'❌'} · ${U.isTaxiDriver?'✅ '+T('taxidriver'):'❌'}</p>
-      ${!U.isDriver?`<button class="btn btn-del btn-s" style="margin-right:3px" onclick="appJob('driver')">${T('become_driver')}</button>`:''}
-      ${!U.isTaxiDriver?`<button class="btn btn-taxi btn-s" onclick="appJob('taxi')">${T('become_taxi')}${U.type!=='elite'?' ⭐':''}</button>`:''}
-      ${apps.length?`<div style="margin-top:6px">${apps.map(a=>`<div style="background:var(--ci);border-radius:4px;padding:4px 8px;border:1px solid var(--b);margin-bottom:3px;font-size:10px">${a.job==='driver'?'📦':'🚀'} ${a.status==='pending'?'⏳':a.status==='approved'?'✅':'❌'}</div>`).join('')}</div>`:''}
+    <div class="psec" style="margin-top:10px"><h4 style="font-size:12px;margin-bottom:6px;border-bottom:1px solid var(--b);padding-bottom:4px">Работа</h4>
+      <p class="m" style="margin-bottom:6px">${U.isDriver?'✅ Доставщик':'❌ Не доставщик'} · ${U.isTaxiDriver?'✅ Таксист':'❌ Не таксист'}</p>
+      ${!U.isDriver?`<button class="btn btn-del btn-s" onclick="appJob('driver')">📦 Стать доставщиком</button> `:''}
+      ${!U.isTaxiDriver?`<button class="btn btn-taxi btn-s" onclick="appJob('taxi')">🚀 Стать таксистом${U.type!=='elite'?' (Элита)':''}</button>`:''}
+      ${apps.length?`<div style="margin-top:8px">${apps.map(a=>`<div style="background:var(--ci);border:1px solid var(--b);border-radius:6px;padding:6px 8px;margin-bottom:4px;font-size:10px">${a.job==='driver'?'📦':'🚀'} ${a.status}</div>`).join('')}</div>`:''}
     </div>
-    <button class="btn btn-o" style="width:100%" onclick="hd('prOv')">${T('close')}</button>
+    <button class="btn btn-o" style="width:100%;margin-top:8px" onclick="hd('prOv')">Закрыть</button>
   `;
-  sh('prOv');snd('c');
+  sh('prOv'); snd('c');
 }
 
 async function svLoc(){
-  const locs={overworld:{x:+v('lOX')||0,z:+v('lOZ')||0},nether:{x:+v('lNX')||0,z:+v('lNZ')||0},end:{x:+v('lEX')||0,z:+v('lEZ')||0}};
-  await fdb.collection('users').doc(U.nick).update({locations:locs});snd('ok');toast(T('saved'));
+  const locations = {
+    overworld:{x:+v('lOX')||0,z:+v('lOZ')||0},
+    nether:{x:+v('lNX')||0,z:+v('lNZ')||0},
+    end:{x:+v('lEX')||0,z:+v('lEZ')||0}
+  };
+  await fdb.collection('users').doc(U.nick).update({ locations });
+  snd('ok'); toast('Сохранено!');
 }
 
 async function appJob(j){
-  if(j==='taxi'&&U.type!=='elite')return toast(T('need_elite'),1);
-  if(dbJobApps.find(a=>a.nick===U.nick&&a.job===j&&a.status==='pending'))return toast(T('already_applied'),1);
-  await fdb.collection('jobApps').add({nick:U.nick,job:j,status:'pending',date:new Date().toLocaleString('ru')});
-  snd('ord');toast(T('application_sent'));openProf();
+  if(j==='taxi' && U.type!=='elite') return toast('Нужна Элита!',1);
+  if(dbJobApps.find(a=>a.nick===U.nick && a.job===j && a.status==='pending')) return toast('Уже подана',1);
+  await fdb.collection('jobApps').add({ nick:U.nick, job:j, status:'pending', date:new Date().toLocaleString('ru') });
+  snd('ord'); toast('Заявка отправлена!'); openProf();
 }
 
-function sTab(t,btn){
-  currentTab=t;
+// TABS
+function sTab(t, btn){
+  currentTab = t;
   document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
   document.querySelectorAll('.tb').forEach(b=>b.className='tb');
-  document.getElementById('p-'+t).classList.add('active');
-  const m={delivery:'a-del',taxi:'a-taxi',bank:'a-bank',orders:'a-ord',admin:'a-adm',work:'a-work'};
-  btn.classList.add(m[t]);snd('c');
+  document.getElementById('p-'+t)?.classList.add('active');
+  const m = {delivery:'a-del',taxi:'a-taxi',bank:'a-bank',orders:'a-ord',admin:'a-adm',work:'a-work'};
+  btn.classList.add(m[t]||'');
+  snd('c');
   ({delivery:rDS,taxi:rTx,bank:rBk,orders:rOr,admin:rAd,work:rWork})[t]?.();
   updWorkNotif();
 }
 
 function updWorkNotif(){
-  const isD=U&&(U.isDriver||isAdm());const isT=U&&(U.isTaxiDriver||isAdm());let cnt=0;
-  if(isD)cnt+=dbOrders.filter(o=>o.type==='delivery'&&o.status==='approved'&&!o.worker).length;
-  if(isT)cnt+=dbOrders.filter(o=>o.type==='taxi'&&o.status==='approved'&&!o.worker).length;
-  const tW=document.getElementById('tW');const ex=tW.querySelector('.ntf');if(ex)ex.remove();
-  if(cnt>0){const n=document.createElement('span');n.className='ntf';n.textContent=cnt;tW.appendChild(n)}
+  if(!U) return;
+  const isD = U.isDriver||isAdm();
+  const isT = U.isTaxiDriver||isAdm();
+  let cnt=0;
+  if(isD) cnt += dbOrders.filter(o=>o.type==='delivery'&&o.status==='approved'&&!o.worker).length;
+  if(isT) cnt += dbOrders.filter(o=>o.type==='taxi'&&o.status==='approved'&&!o.worker).length;
+  const tW=document.getElementById('tW');
+  const old=tW.querySelector('.ntf'); if(old) old.remove();
+  if(cnt>0){ const n=document.createElement('span'); n.className='ntf'; n.textContent=cnt; tW.appendChild(n); }
 }
 
 // DELIVERY
 function rDS(){
   const g=document.getElementById('dsG');
-  if(!dbShops.length){g.innerHTML=`<p class="m" style="text-align:center;grid-column:1/-1">${T('no_shops')}</p>`;return}
-  g.innerHTML=dbShops.map((s,i)=>{
-    const ow=(dbOwners&&dbOwners[s.docId])?dbOwners[s.docId]:[];
-    return`<div class="card click ${window._ds===i?'sel':''}" onclick="dsSel(${i})">
-      ${s.image&&isUrl(s.image)?`<img class="shop-img" src="${s.image}" onerror="this.style.display='none'">`:''}
-      <h3>${s.icon||'🏪'} ${s.name}</h3>
+  if(!dbShops.length){ g.innerHTML='<p class="m" style="text-align:center;grid-column:1/-1">Нет магазинов</p>'; return; }
+  g.innerHTML = dbShops.map((s,i)=>`
+    <div class="card click ${window._ds===i?'sel':''}" onclick="dsSel(${i})">
+      ${s.image && isUrl(s.image) ? `<img class="shop-img" src="${s.image}" onerror="this.style.display='none'">` : ''}
+      <h3>${s.icon && !isUrl(s.icon) ? s.icon : '🏪'} ${s.name}</h3>
       <p class="m">${s.desc||''}</p>
-      <p class="m">📍 X:${s.x} Z:${s.z} · ${(s.items||[]).length}т</p>
-      ${ow.length?`<p class="m" style="color:var(--taxi);margin-top:4px">👤 ${ow.join(',')}</p>`:''}
+      <p class="m">📍 X:${s.x} Z:${s.z} · ${(s.items||[]).length} тов.</p>
+    </div>
+  `).join('');
+}
+function dsSel(i){ window._ds=i; rDS(); rDI(); snd('c'); }
+function rDI(){
+  const s=dbShops[window._ds]; if(!s) return;
+  sh('dsI');
+  document.getElementById('dsT').textContent = (s.icon && !isUrl(s.icon) ? s.icon+' ' : '🏪 ') + s.name;
+  const l=document.getElementById('dsIL');
+  if(!s.items?.length){ l.innerHTML='<p class="m">Нет товаров</p>'; return; }
+  l.innerHTML = s.items.map((it,j)=>{
+    const c=cart.find(x=>x.s===window._ds&&x.i===j);
+    const stock = it.qty;
+    const stockTxt = stock===undefined || stock===null || stock==='' ? '∞' : stock;
+    return `<div class="irow">
+      <div class="iicon">${rIcon(it.icon)}</div>
+      <div class="ititle">${it.name}</div>
+      <div class="iprice">${it.price}${cH(13)}</div>
+      <div class="istock">В наличии: ${stockTxt}</div>
+      <div class="qc">
+        <button class="qb" onclick="cQ(${window._ds},${j},-1)">−</button>
+        <span class="qv">${c?c.q:0}</span>
+        <button class="qb" onclick="cQ(${window._ds},${j},1)">+</button>
+      </div>
     </div>`;
   }).join('');
+  uDC();
 }
-function dsSel(i){window._ds=i;rDS();rDI();snd('c')}
-function rDI(){
-  const s=dbShops[window._ds];if(!s)return;
-  sh('dsI');document.getElementById('dsT').textContent=`${s.icon||'🏪'} ${s.name}`;
-  const l=document.getElementById('dsIL');
-  if(!s.items?.length){l.innerHTML=`<p class="m">${T('no_data')}</p>`;return}
-  l.innerHTML=s.items.map((it,j)=>{
-    const c=cart.find(x=>x.s===window._ds&&x.i===j);
-    return`<div class="irow"><div class="iicon">${rIcon(it.icon)}</div><div class="ititle">${it.name}</div><div class="iprice">${it.price}${cH(13)}</div><div style="font-size:9px;color:var(--td);margin-bottom:6px">В наличии: ${it.qty||'∞'}</div><div class="qc"><button class="qb" onclick="cQ(${window._ds},${j},-1)">−</button><span class="qv">${c?c.q:0}</span><button class="qb" onclick="cQ(${window._ds},${j},1,${it.qty})">+</button></div></div>`;
-  }).join('');uDC();
-}
-function cQ(s,i,d,max){
-  snd('c');let c=cart.find(x=>x.s===s&&x.i===i);
+function cQ(s,i,d){
+  snd('c');
+  const shop=dbShops[s]; if(!shop) return;
+  const it=shop.items[i]; if(!it) return;
+  let c=cart.find(x=>x.s===s&&x.i===i);
   if(c){
-      c.q+=d;
-      if(max&&c.q>max){c.q=max;toast('Максимум товара!',1)}
-      if(c.q<=0)cart=cart.filter(x=>!(x.s===s&&x.i===i));
-  }else if(d>0){
-      if(max&&max<1)return toast('Нет в наличии!',1);
-      cart.push({s,i,q:1});
+    c.q += d;
+    if(it.qty!=null && it.qty!=='' && c.q > +it.qty){ c.q = +it.qty; toast('Максимум на складе!',1); }
+    if(c.q<=0) cart = cart.filter(x=>!(x.s===s&&x.i===i));
+  } else if(d>0){
+    if(it.qty!=null && it.qty!=='' && +it.qty < 1) return toast('Нет в наличии!',1);
+    cart.push({s,i,q:1});
   }
   rDI();
 }
 function uDC(){
-  if(!cart.length){hd('dsC');hd('dsM');hd('dsP');return}
-  sh('dsC');sh('dsM');sh('dsP');
+  if(!cart.length){ hd('dsC'); hd('dsM'); hd('dsP'); return; }
+  sh('dsC'); sh('dsM'); sh('dsP');
   let sub=0;
-  document.getElementById('dsCL').innerHTML=cart.map(c=>{
-    const s=dbShops[c.s];if(!s)return'';const it=s.items[c.i];if(!it)return'';
-    const ln=it.price*c.q;sub+=ln;
-    return`<div class="ci-r"><span>${it.name}×${c.q}</span><span>${ln}${cH(11)}</span></div>`;
-  }).join('');uDCC(sub);
+  document.getElementById('dsCL').innerHTML = cart.map(c=>{
+    const s=dbShops[c.s]; if(!s) return '';
+    const it=s.items[c.i]; if(!it) return '';
+    const ln=it.price*c.q; sub+=ln;
+    return `<div class="ci-r"><span>${it.name} ×${c.q}</span><span>${ln}${cH(11)}</span></div>`;
+  }).join('');
+  uDCC(sub);
 }
 function uDCC(sub){
-  if(!sub){sub=0;cart.forEach(c=>{const s=dbShops[c.s];if(s?.items[c.i])sub+=s.items[c.i].price*c.q})}
-  const dx=+v('delX')||0,dz=+v('delZ')||0;
-  let fee=0,u={};
-  cart.forEach(c=>{if(!u[c.s]){const s=dbShops[c.s];if(s){fee+=Math.max(1,Math.ceil(Math.sqrt((s.x-dx)**2+(s.z-dz)**2)*(dbRates.d||.05)));u[c.s]=1}}});
-  document.getElementById('dsF').innerHTML=`${fee}${cH(11)}`;
-  document.getElementById('dsTot').innerHTML=`${sub+fee}${cH(14)}`;
+  if(sub==null){ sub=0; cart.forEach(c=>{ const s=dbShops[c.s]; if(s?.items?.[c.i]) sub += s.items[c.i].price*c.q; }); }
+  const dx=+v('delX')||0, dz=+v('delZ')||0;
+  let fee=0, used={};
+  cart.forEach(c=>{
+    if(used[c.s]) return;
+    const s=dbShops[c.s]; if(!s) return;
+    fee += Math.max(1, Math.ceil(Math.sqrt((s.x-dx)**2+(s.z-dz)**2)*(dbRates.d||0.05)));
+    used[c.s]=1;
+  });
+  document.getElementById('dsF').innerHTML = fee + cH(11);
+  document.getElementById('dsTot').innerHTML = (sub+fee) + cH(14);
 }
-function sPay(m,el){payM=m;document.querySelectorAll('#p-delivery .payopt').forEach(o=>o.classList.remove('sel'));el.classList.add('sel');snd('c')}
+function sPay(m,el){
+  payM=m;
+  document.querySelectorAll('#p-delivery .payopt').forEach(o=>o.classList.remove('sel'));
+  el.classList.add('sel'); snd('c');
+}
 async function placeDel(){
-  if(!cart.length)return toast(T('empty_cart'),1);
-  const dx=v('delX'),dz=v('delZ');if(dx===''||dz==='')return toast('Введи X и Z!',1);
-  let sub=0,fee=0,u2={},items=[],shopUpdates={};
-  
-  // Проверка наличия
-  for(let c of cart){
-      const s=dbShops[c.s];if(!s)continue;const it=s.items[c.i];if(!it)continue;
-      if(it.qty!==undefined && c.q>it.qty) return toast(`Товара ${it.name} не хватает!`,1);
-      sub+=it.price*c.q;
-      items.push({name:it.name,icon:it.icon||'📦',qty:c.q,shop:s.name});
-      if(!u2[c.s]){fee+=Math.max(1,Math.ceil(Math.sqrt((s.x-dx)**2+(s.z-dz)**2)*(dbRates.d||.05)));u2[c.s]=1}
-      
-      if(it.qty!==undefined){
-          if(!shopUpdates[s.docId]) shopUpdates[s.docId] = JSON.parse(JSON.stringify(s.items));
-          shopUpdates[s.docId][c.i].qty -= c.q;
-      }
+  if(!cart.length) return toast('Корзина пуста!',1);
+  const dx=v('delX'), dz=v('delZ');
+  if(dx===''||dz==='') return toast('Введи X и Z!',1);
+
+  let sub=0, fee=0, used={}, items=[], shopUpdates={};
+  for(const c of cart){
+    const s=dbShops[c.s]; if(!s) continue;
+    const it=s.items[c.i]; if(!it) continue;
+    if(it.qty!=null && it.qty!=='' && c.q > +it.qty) return toast(`Не хватает: ${it.name}`,1);
+    sub += it.price*c.q;
+    items.push({ name:it.name, icon:it.icon||'📦', qty:c.q, shop:s.name });
+    if(!used[c.s]){
+      fee += Math.max(1, Math.ceil(Math.sqrt((s.x-+dx)**2+(s.z-+dz)**2)*(dbRates.d||0.05)));
+      used[c.s]=1;
+    }
+    if(it.qty!=null && it.qty!==''){
+      if(!shopUpdates[s.docId]) shopUpdates[s.docId]=JSON.parse(JSON.stringify(s.items));
+      shopUpdates[s.docId][c.i].qty = +shopUpdates[s.docId][c.i].qty - c.q;
+    }
   }
-  
-  const tot=sub+fee;
+  const tot = sub+fee;
   if(payM==='online'){
-      if(U.balance<tot)return toast(T('not_enough')+` ${tot}`,1);
-      await fdb.collection('users').doc(U.nick).update({balance:U.balance-tot,transactions:firebase.firestore.FieldValue.arrayUnion({desc:T('tab_del'),amount:-tot,date:new Date().toLocaleString('ru')})});
+    if(bal(U.balance) < tot) return toast('Не хватает средств! Нужно '+tot,1);
+    await fdb.collection('users').doc(U.nick).update({
+      balance: bal(U.balance)-tot,
+      transactions: firebase.firestore.FieldValue.arrayUnion({ desc:'Доставка', amount:-tot, date:new Date().toLocaleString('ru') })
+    });
   }
-  
-  // Обновляем остатки в магазинах
-  for(let docId in shopUpdates){
-      await fdb.collection('shops').doc(docId).update({items: shopUpdates[docId]});
+  for(const docId of Object.keys(shopUpdates)){
+    await fdb.collection('shops').doc(docId).update({ items: shopUpdates[docId] });
   }
-  
-  const nid=(dbOrders[0]?.id||1000)+1;
-  const toP=v('delPlr')||null;
-  await fdb.collection('orders').add({id:nid,type:'delivery',user:U.nick,items,coords:{x:+dx,z:+dz},fee,sub,total:tot,payment:payM,comment:v('dCom'),status:'pending',date:new Date().toLocaleString('ru'),worker:null,toPlayer:toP});
-  
-  cart=[];window._ds=null;document.getElementById('delX').value='';document.getElementById('delZ').value='';
-  rDS();hd('dsI');hd('dsC');hd('dsM');hd('dsP');snd('ord');toast(T('order_placed')+` ${tot}`);
+  const nid = (dbOrders[0]?.id || 1000) + 1;
+  await fdb.collection('orders').add({
+    id:nid, type:'delivery', user:U.nick, items,
+    coords:{x:+dx,z:+dz}, fee, sub, total:tot, payment:payM,
+    comment:v('dCom'), status:'pending', date:new Date().toLocaleString('ru'),
+    worker:null, toPlayer:v('delPlr')||null
+  });
+  cart=[]; window._ds=null;
+  document.getElementById('delX').value='';
+  document.getElementById('delZ').value='';
+  rDS(); hd('dsI'); hd('dsC'); hd('dsM'); hd('dsP');
+  snd('ord'); toast('Заказ оформлен! '+tot);
 }
 
 // TAXI
-let taxPayM='online';
-function sPayTx(m,el){taxPayM=m;document.querySelectorAll('#taxPayOpts .payopt').forEach(o=>o.classList.remove('sel'));el.classList.add('sel');snd('c')}
-function cTxP(){const fx=+v('txFX'),fz=+v('txFZ'),tx=+v('txTX'),tz=+v('txTZ');if(fx===''||fz===''||tx===''||tz==='')return;const d=Math.sqrt((tx-fx)**2+(tz-fz)**2);document.getElementById('txPr').innerHTML=`📏 ${Math.round(d)} блоков → ${Math.max(1,Math.ceil(d*(dbRates.t||.03)))}${cH(16)}`}
+function rTx(){ /* UI already in HTML */ }
+function sPayTx(m,el){
+  taxPayM=m;
+  document.querySelectorAll('#taxPayOpts .payopt').forEach(o=>o.classList.remove('sel'));
+  el.classList.add('sel'); snd('c');
+}
+function cTxP(){
+  const fx=v('txFX'), fz=v('txFZ'), tx=v('txTX'), tz=v('txTZ');
+  if(fx===''||fz===''||tx===''||tz===''){ document.getElementById('txPr').innerHTML=''; return; }
+  const d=Math.sqrt((+tx-+fx)**2 + (+tz-+fz)**2);
+  const p=Math.max(1, Math.ceil(d*(dbRates.t||0.03)));
+  document.getElementById('txPr').innerHTML = `📏 ${Math.round(d)} блоков → ${p}${cH(16)}`;
+}
 async function ordTx(){
-  const fx=v('txFX'),fz=v('txFZ'),tx=v('txTX'),tz=v('txTZ');
-  if(fx===''||fz===''||tx===''||tz==='')return toast('Введи все координаты!',1);
-  const d=Math.sqrt((+tx-+fx)**2+(+tz-+fz)**2);const p=Math.max(1,Math.ceil(d*(dbRates.t||.03)));
-  if(taxPayM==='online'){if(U.balance<p)return toast(T('not_enough'),1);await fdb.collection('users').doc(U.nick).update({balance:U.balance-p,transactions:firebase.firestore.FieldValue.arrayUnion({desc:T('tab_taxi'),amount:-p,date:new Date().toLocaleString('ru')})})}
+  const fx=v('txFX'), fz=v('txFZ'), tx=v('txTX'), tz=v('txTZ');
+  if(fx===''||fz===''||tx===''||tz==='') return toast('Укажи откуда и куда!',1);
+  const d=Math.sqrt((+tx-+fx)**2 + (+tz-+fz)**2);
+  const p=Math.max(1, Math.ceil(d*(dbRates.t||0.03)));
+  if(taxPayM==='online'){
+    if(bal(U.balance)<p) return toast('Не хватает средств!',1);
+    await fdb.collection('users').doc(U.nick).update({
+      balance: bal(U.balance)-p,
+      transactions: firebase.firestore.FieldValue.arrayUnion({ desc:'Такси', amount:-p, date:new Date().toLocaleString('ru') })
+    });
+  }
   const nid=(dbOrders[0]?.id||1000)+1;
-  const toP=v('taxPlr')||null;
-  await fdb.collection('orders').add({id:nid,type:'taxi',user:U.nick,from:`X:${fx} Z:${fz}`,to:`X:${tx} Z:${tz}`,distance:Math.round(d),total:p,payment:taxPayM,comment:v('txCom'),status:'pending',date:new Date().toLocaleString('ru'),worker:null,toPlayer:toP});
-  document.getElementById('txFX').value='';document.getElementById('txFZ').value='';document.getElementById('txTX').value='';document.getElementById('txTZ').value='';document.getElementById('txPr').innerHTML='';
-  snd('ord');toast(T('taxi_ordered'));
+  await fdb.collection('orders').add({
+    id:nid, type:'taxi', user:U.nick,
+    from:`X:${fx} Z:${fz}`, to:`X:${tx} Z:${tz}`,
+    distance:Math.round(d), total:p, payment:taxPayM,
+    comment:v('txCom'), status:'pending', date:new Date().toLocaleString('ru'),
+    worker:null, toPlayer:v('taxPlr')||null
+  });
+  ['txFX','txFZ','txTX','txTZ','txCom'].forEach(id=>{ const e=document.getElementById(id); if(e) e.value=''; });
+  document.getElementById('txPr').innerHTML='';
+  snd('ord'); toast('Такси вызвано!');
 }
 
 // BANK
-function rBk(){document.getElementById('bB').textContent=U.balance;rTxH()}
-async function doTr(){const to=v('trN'),a=parseInt(v('trA'));if(!to||!a||a<=0)return toast('!',1);if(to===U.nick)return toast(T('cant_self'),1);if(U.balance<a)return toast(T('not_enough'),1);const tD=await fdb.collection('users').doc(to).get();if(!tD.exists)return toast(T('not_found'),1);await fdb.collection('users').doc(U.nick).update({balance:U.balance-a,transactions:firebase.firestore.FieldValue.arrayUnion({desc:`→ ${to}`,amount:-a,date:new Date().toLocaleString('ru')})});await fdb.collection('users').doc(to).update({balance:(tD.data().balance||0)+a,transactions:firebase.firestore.FieldValue.arrayUnion({desc:`← ${U.nick}`,amount:a,date:new Date().toLocaleString('ru')})});document.getElementById('trN').value='';document.getElementById('trA').value='';snd('coin');toast(T('sent')+` ${a}→${to}`)}
-function rTxH(){const tx=U?.transactions||[];document.getElementById('txH').innerHTML=tx.length?tx.slice(-15).reverse().map(t=>`<div class="txr"><div><div style="font-weight:600;font-size:11px">${t.desc}</div><div style="font-size:9px;color:var(--td)">${t.date}</div></div><span class="${t.amount>=0?'tx-p':'tx-n'}">${t.amount>=0?'+':''}${t.amount}${cH(12)}</span></div>`).join(''):`<p class="m" style="text-align:center">${T('no_data')}</p>`}
+function rBk(){ uBal(); rTxH(); }
+async function doTr(){
+  const to=v('trN'), a=parseInt(v('trA'));
+  if(!to||!a||a<=0) return toast('Заполни поля!',1);
+  if(to===U.nick) return toast('Нельзя себе!',1);
+  if(bal(U.balance)<a) return toast('Не хватает!',1);
+  const tD=await fdb.collection('users').doc(to).get();
+  if(!tD.exists) return toast('Не найден!',1);
+  await fdb.collection('users').doc(U.nick).update({
+    balance:bal(U.balance)-a,
+    transactions: firebase.firestore.FieldValue.arrayUnion({ desc:'→ '+to, amount:-a, date:new Date().toLocaleString('ru') })
+  });
+  await fdb.collection('users').doc(to).update({
+    balance: bal(tD.data().balance)+a,
+    transactions: firebase.firestore.FieldValue.arrayUnion({ desc:'← '+U.nick, amount:a, date:new Date().toLocaleString('ru') })
+  });
+  document.getElementById('trN').value='';
+  document.getElementById('trA').value='';
+  snd('coin'); toast('Отправлено '+a+' → '+to);
+}
+function rTxH(){
+  const tx = U?.transactions || [];
+  document.getElementById('txH').innerHTML = tx.length
+    ? tx.slice(-15).reverse().map(t=>`
+      <div class="txr">
+        <div><div style="font-weight:600">${t.desc}</div><div style="font-size:9px;color:var(--tm)">${t.date||''}</div></div>
+        <span class="${t.amount>=0?'tx-p':'tx-n'}">${t.amount>=0?'+':''}${t.amount}${cH(12)}</span>
+      </div>`).join('')
+    : '<p class="m" style="text-align:center">Нет операций</p>';
+}
 
-// ORDERS (Двойное подтверждение)
+// ORDERS
 function rOr(){
   const my=dbOrders.filter(o=>o.user===U.nick);
-  const sl={pending:'⏳ Ожидает',approved:'✅ Одобрен',accepted:'🔧 Принят курьером',delivering:'🚚 В пути',waiting_customer:'📦 Курьер доставил! Подтверди:',done:'✓ Завершён',rejected:'❌ Отклонён'};
+  const sl={pending:'⏳ Ожидает',approved:'✅ Одобрен',accepted:'🔧 Принят',delivering:'🚚 В пути',waiting_customer:'📦 Подтверди получение',done:'✓ Готово',rejected:'❌ Отклонён'};
   const sc={pending:'w',approved:'a',accepted:'t',delivering:'t',waiting_customer:'w',done:'a',rejected:'r'};
-  document.getElementById('oL').innerHTML=my.length?my.map(o=>`
-    <div class="ocard" style="${o.status==='waiting_customer'?'border:2px solid var(--ok);background:rgba(16,185,129,0.05)':''}">
-      <div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:2px">
-        <h3 style="margin:0;font-size:13px">${o.type==='delivery'?'📦':'🚀'} #${o.id}</h3>
+  document.getElementById('oL').innerHTML = my.length ? my.map(o=>`
+    <div class="ocard" style="${o.status==='waiting_customer'?'border-color:var(--ok)':''}">
+      <div style="display:flex;justify-content:space-between;gap:4px;flex-wrap:wrap">
+        <strong>${o.type==='delivery'?'📦':'🚀'} #${o.id}</strong>
         <span class="sb ${sc[o.status]||'w'}">${sl[o.status]||o.status}</span>
       </div>
-      <p style="font-size:10px;color:var(--td);margin:4px 0">${o.date}</p>
-      ${o.type==='delivery'?`<p class="m">${o.items?.map(i=>`${isUrl(i.icon)?'📦':i.icon} ${i.name}×${i.qty}`).join(', ')}</p>`:`<p class="m">${o.from} → ${o.to}</p>`}
-      ${o.worker?`<p class="m" style="margin-top:4px">👷 Исполнитель: <b>${o.worker}</b></p>`:''}
-      <p style="font-weight:700;color:var(--p);font-size:14px;margin-top:6px">${o.total}${cH(14)} <span style="font-size:10px;color:var(--tm);font-weight:400">${o.payment==='cash'?'(Наличные)':''}</span></p>
+      <p style="font-size:10px;color:var(--tm);margin:4px 0">${o.date||''}</p>
+      ${o.type==='delivery'
+        ? `<p class="m">${(o.items||[]).map(i=>`${i.name}×${i.qty}`).join(', ')}</p><p class="m">📍 X:${o.coords?.x} Z:${o.coords?.z}</p>`
+        : `<p class="m">${o.from} → ${o.to}</p>`}
+      ${o.worker?`<p class="m">👷 ${o.worker}</p>`:''}
+      ${o.toPlayer?`<p class="m">🎯 ${o.toPlayer}${isServerOnline(o.toPlayer)?' <span class="online-badge">🟢</span>':''}</p>`:''}
+      <p style="font-weight:800;color:var(--p);margin-top:6px">${o.total}${cH(14)} ${o.payment==='cash'?'(нал)':''}</p>
       ${o.status==='waiting_customer'?`
-        <div style="margin-top:10px;padding:10px;background:var(--ci);border-radius:8px;border:1px solid var(--ok)">
-          <p style="font-size:11px;color:var(--ok);font-weight:700;margin-bottom:6px">Исполнитель сообщил о выполнении!</p>
-          <button class="btn btn-ok" style="width:100%" onclick="customerConfirm('${o.docId}')">✅ Подтвердить ${o.payment==='online'?'и выплатить':''}</button>
-        </div>
+        <button class="btn btn-ok" style="width:100%;margin-top:8px" onclick="customerConfirm('${o.docId}')">✅ Подтвердить получение</button>
       `:''}
-      ${(o.status==='accepted'||o.status==='delivering'||o.status==='waiting_customer')?`<button class="btn btn-bank btn-s" style="width:100%;margin-top:6px" onclick="openChat('${o.docId}')">${T('chat')}</button>`:''}
+      ${['accepted','delivering','waiting_customer'].includes(o.status)?`
+        <button class="btn btn-bank btn-s" style="width:100%;margin-top:6px" onclick="openChat('${o.docId}')">💬 Чат</button>
+      `:''}
     </div>
-  `).join(''):`<p class="m" style="text-align:center">${T('no_data')}</p>`;
+  `).join('') : '<p class="m" style="text-align:center">Нет заказов</p>';
 }
 
 async function customerConfirm(docId){
-  const o=dbOrders.find(x=>x.docId===docId);if(!o)return;
-  const reward=o.type==='delivery'?o.fee:o.total;
-  await fdb.collection('orders').doc(docId).update({status:'done'});
+  const o=dbOrders.find(x=>x.docId===docId); if(!o) return;
+  const reward = o.type==='delivery' ? o.fee : o.total;
+  await fdb.collection('orders').doc(docId).update({ status:'done' });
   if(o.worker && o.payment==='online'){
     const wDoc=await fdb.collection('users').doc(o.worker).get();
     if(wDoc.exists){
       await fdb.collection('users').doc(o.worker).update({
-        balance:(wDoc.data().balance||0)+reward,
-        transactions:firebase.firestore.FieldValue.arrayUnion({desc:`Выплата #${o.id}`,amount:reward,date:new Date().toLocaleString('ru')})
+        balance: bal(wDoc.data().balance)+reward,
+        transactions: firebase.firestore.FieldValue.arrayUnion({ desc:'Выплата #'+o.id, amount:reward, date:new Date().toLocaleString('ru') })
       });
     }
   }
-  snd('coin');toast('✅ Подтверждено!');
+  snd('coin'); toast('✅ Подтверждено!');
 }
 
 // WORK
 function rWork(){
-  const isD=U.isDriver||isAdm();const isT=U.isTaxiDriver||isAdm();
+  const isD=U.isDriver||isAdm();
+  const isT=U.isTaxiDriver||isAdm();
   const dO=dbOrders.filter(o=>o.type==='delivery'&&o.status==='approved'&&!o.worker);
-  document.getElementById('wDel').innerHTML=!isD?`<p class="m">${T('apply_profile')}</p>`:!dO.length?`<p class="m">${T('no_data')}</p>`:dO.map(o=>`
+  document.getElementById('wDel').innerHTML = !isD ? '<p class="m">Подай заявку в профиле</p>' : !dO.length ? '<p class="m">Нет заказов</p>' : dO.map(o=>`
     <div class="work-order"><div class="badge-new">NEW</div>
       <h3 style="font-size:14px">📦 #${o.id}</h3>
-      <p class="m">👤 Заказчик: <b>${o.user}</b></p>
-      ${o.toPlayer?`<p class="m">🎯 К игроку: <b>${o.toPlayer}</b></p>`:''}
-      <p style="font-size:12px;margin:5px 0">${o.items.map(i=>`${isUrl(i.icon)?'📦':i.icon} ${i.name}×${i.qty}`).join(', ')}</p>
-      <p class="m">📍 X:${o.coords.x} Z:${o.coords.z}</p>
-      ${o.comment?`<p class="m">💬 ${o.comment}</p>`:''}
-      <div class="reward">${T('reward')}: +${o.fee}${cH(16)} <span style="font-size:10px;color:var(--tm);font-weight:400">${o.payment==='cash'?'(Наличные клиенту)':''}</span></div>
-      <button class="btn btn-ok" style="width:100%" onclick="accOrd('${o.docId}')">${T('accept_order')}</button>
+      <p class="m">👤 ${o.user}${isServerOnline(o.user)?' <span class="online-badge">🟢</span>':''}</p>
+      ${o.toPlayer?`<p class="m">🎯 ${o.toPlayer}${isServerOnline(o.toPlayer)?' <span class="online-badge">🟢</span>':''}</p>`:''}
+      <p class="m">${(o.items||[]).map(i=>i.name+'×'+i.qty).join(', ')}</p>
+      <p class="m">📍 X:${o.coords?.x} Z:${o.coords?.z}</p>
+      <div class="reward">+${o.fee}${cH(16)} ${o.payment==='cash'?'(нал)':''}</div>
+      <button class="btn btn-ok" style="width:100%" onclick="accOrd('${o.docId}')">✅ Принять</button>
     </div>
   `).join('');
-  
+
   const tO=dbOrders.filter(o=>o.type==='taxi'&&o.status==='approved'&&!o.worker);
-  document.getElementById('wTaxi').innerHTML=!isT?`<p class="m">${T('apply_profile')}</p>`:!tO.length?`<p class="m">${T('no_data')}</p>`:tO.map(o=>`
+  document.getElementById('wTaxi').innerHTML = !isT ? '<p class="m">Подай заявку в профиле</p>' : !tO.length ? '<p class="m">Нет заказов</p>' : tO.map(o=>`
     <div class="work-order"><div class="badge-new">NEW</div>
       <h3 style="font-size:14px">🚀 #${o.id}</h3>
-      <p class="m">👤 ${o.user}</p>
-      <p style="font-size:12px;margin:5px 0">${o.from} → ${o.to}</p>
-      ${o.toPlayer?`<p class="m">🎯 К игроку: <b>${o.toPlayer}</b></p>`:''}
-      ${o.comment?`<p class="m">💬 ${o.comment}</p>`:''}
-      <div class="reward">${T('reward')}: +${o.total}${cH(16)} <span style="font-size:10px;color:var(--tm);font-weight:400">${o.payment==='cash'?'(Нал)':''}</span></div>
-      <button class="btn btn-ok" style="width:100%" onclick="accOrd('${o.docId}')">${T('accept_order')}</button>
+      <p class="m">👤 ${o.user}${isServerOnline(o.user)?' <span class="online-badge">🟢</span>':''}</p>
+      <p class="m">${o.from} → ${o.to}</p>
+      ${o.toPlayer?`<p class="m">🎯 ${o.toPlayer}</p>`:''}
+      <div class="reward">+${o.total}${cH(16)} ${o.payment==='cash'?'(нал)':''}</div>
+      <button class="btn btn-ok" style="width:100%" onclick="accOrd('${o.docId}')">✅ Принять</button>
     </div>
   `).join('');
-  
-  const mA=dbOrders.filter(o=>o.worker===U.nick&&(o.status==='accepted'||o.status==='delivering'||o.status==='waiting_customer'));
-  document.getElementById('wAct').innerHTML=!mA.length?`<p class="m">${T('no_data')}</p>`:mA.map(o=>`
+
+  const mA=dbOrders.filter(o=>o.worker===U.nick && ['accepted','delivering','waiting_customer'].includes(o.status));
+  document.getElementById('wAct').innerHTML = !mA.length ? '<p class="m">Нет активных</p>' : mA.map(o=>`
     <div class="work-order">
       <h3 style="font-size:14px">${o.type==='delivery'?'📦':'🚀'} #${o.id} — ${o.user}</h3>
-      <div class="reward">+${o.type==='delivery'?o.fee:o.total}${cH(16)} ${o.payment==='cash'?'(Нал)':''}</div>
-      <button class="btn btn-bank btn-s" style="width:100%;margin-bottom:8px" onclick="openChat('${o.docId}')">${T('chat')}</button>
-      ${o.status==='waiting_customer'?`
-        <div style="background:var(--ci);padding:8px;border-radius:8px;text-align:center;font-size:11px;color:var(--del);font-weight:700">⏳ Ожидание подтверждения от заказчика (${o.user})...</div>
-      `:`
-        <div style="display:flex;gap:6px">
-          ${o.status==='accepted'?`<button class="btn btn-del btn-s" style="flex:1" onclick="wSt('${o.docId}','delivering')">${T('in_transit')}</button>`:''}
-          <button class="btn btn-ok btn-s" style="flex:1" onclick="reqConfirm('${o.docId}')">📦 Доставил (Запросить)</button>
-        </div>
-      `}
+      <div class="reward">+${o.type==='delivery'?o.fee:o.total}${cH(16)} ${o.payment==='cash'?'(нал)':''}</div>
+      <button class="btn btn-bank btn-s" style="width:100%;margin-bottom:6px" onclick="openChat('${o.docId}')">💬 Чат</button>
+      ${o.status==='waiting_customer'
+        ? `<div style="text-align:center;color:var(--del);font-size:11px;font-weight:700">⏳ Ждём подтверждения заказчика...</div>`
+        : `<div style="display:flex;gap:6px">
+            ${o.status==='accepted'?`<button class="btn btn-del btn-s" style="flex:1" onclick="wSt('${o.docId}','delivering')">🚚 В пути</button>`:''}
+            <button class="btn btn-ok btn-s" style="flex:1" onclick="reqConfirm('${o.docId}')">📦 Доставил</button>
+          </div>`}
     </div>
   `).join('');
+  updWorkNotif();
 }
-
-async function reqConfirm(docId){await fdb.collection('orders').doc(docId).update({status:'waiting_customer'});snd('ok');toast('Запрос отправлен!')}
-async function accOrd(docId){await fdb.collection('orders').doc(docId).update({worker:U.nick,status:'accepted'});snd('ok');toast(T('accepted'))}
-async function wSt(docId,st){await fdb.collection('orders').doc(docId).update({status:st});snd('ok')}
+async function accOrd(docId){ await fdb.collection('orders').doc(docId).update({ worker:U.nick, status:'accepted' }); snd('ok'); toast('Принят!'); }
+async function wSt(docId,st){ await fdb.collection('orders').doc(docId).update({ status:st }); snd('ok'); }
+async function reqConfirm(docId){ await fdb.collection('orders').doc(docId).update({ status:'waiting_customer' }); snd('ok'); toast('Запрос отправлен!'); }
 
 // CHAT
 function openChat(docId){
-  currentChatDoc=docId;sh('chatM');
-  if(chatUnsub)chatUnsub();
-  chatUnsub=fdb.collection('orders').doc(docId).collection('messages').orderBy('ts').onSnapshot(snap=>{
-    const l=document.getElementById('chatList');l.innerHTML='';
+  currentChatDoc=docId; sh('chatM');
+  if(chatUnsub) chatUnsub();
+  chatUnsub = fdb.collection('orders').doc(docId).collection('messages').orderBy('ts').onSnapshot(snap=>{
+    const l=document.getElementById('chatList'); l.innerHTML='';
     snap.forEach(d=>{
-      const m=d.data();const isMy=m.author===U.nick;
-      l.innerHTML+=`<div class="msg ${isMy?'my':'other'}"><div style="font-weight:700;font-size:9px;margin-bottom:2px">${isMy?'Я':m.author}</div><div>${m.text}</div><div class="msg-time">${new Date(m.ts).toLocaleTimeString('ru',{hour:'2-digit',minute:'2-digit'})}</div></div>`;
+      const m=d.data(); const my=m.author===U.nick;
+      l.innerHTML += `<div class="msg ${my?'my':'other'}"><b style="font-size:9px">${my?'Я':m.author}</b><div>${m.text}</div></div>`;
     });
     l.scrollTop=l.scrollHeight;
   });
 }
 async function sendChat(){
-  const t=v('chatInput');if(!t||!currentChatDoc)return;
+  const t=v('chatInput'); if(!t||!currentChatDoc) return;
   document.getElementById('chatInput').value='';
-  await fdb.collection('orders').doc(currentChatDoc).collection('messages').add({author:U.nick,text:t,ts:Date.now()});
+  await fdb.collection('orders').doc(currentChatDoc).collection('messages').add({ author:U.nick, text:t, ts:Date.now() });
   snd('c');
 }
-function closeChat(){if(chatUnsub){chatUnsub();chatUnsub=null}currentChatDoc=null;hd('chatM')}
+function closeChat(){ if(chatUnsub){chatUnsub();chatUnsub=null;} currentChatDoc=null; hd('chatM'); }
 
 // ADMIN
-function rAd(){if(!isAdm())return;rAdU();rAdS();rOw();rAdP();rJA();rAdA();ldR()}
+function rAd(){ if(!isAdm()) return; rAdU(); rAdS(); rAdP(); rJA(); rAdA(); ldR(); }
 function rAdU(){
-  const now=Date.now();const us=Object.values(dbUsers).sort((a,b)=>(b.lastOnline||0)-(a.lastOnline||0));
-  document.getElementById('adUsers').innerHTML=us.length?us.map(u=>`
+  const now=Date.now();
+  const us=Object.values(dbUsers).sort((a,b)=>(b.lastOnline||0)-(a.lastOnline||0));
+  document.getElementById('adUsers').innerHTML = us.length ? us.map(u=>`
     <div class="user-row">
-      <img src="https://mc-heads.net/avatar/${u.nick}/20">
-      <span class="online-dot ${(now-(u.lastOnline||0))<60000?'on':'off'}"></span>
+      <img src="https://mc-heads.net/avatar/${encodeURIComponent(u.nick)}/20">
+      <span class="dot ${(now-(u.lastOnline||0))<60000 || isServerOnline(u.nick) ? 'on':'off'}"></span>
       <strong>${u.nick}</strong>
-      <span style="color:var(--tm);font-size:9px;margin-left:auto">${tAgo(u.lastOnline)}</span>
-      <span style="font-size:9px;color:var(--td)">${u.type==='elite'?'⭐':''} ${u.isDriver?'📦':''} ${u.isTaxiDriver?'🚀':''}</span>
-      <span style="font-size:9px;color:var(--bank)">${u.balance||0}</span>
+      ${isServerOnline(u.nick)?'<span class="online-badge">сервер</span>':''}
+      <span style="margin-left:auto;color:var(--tm);font-size:9px">${tAgo(u.lastOnline)}</span>
+      <span style="color:var(--bank)">${bal(u.balance)}</span>
     </div>
-  `).join(''):'—';
+  `).join('') : '—';
 }
 function rAdS(){
-  document.getElementById('adS').innerHTML=dbShops.length?dbShops.map((s,i)=>`
+  document.getElementById('adS').innerHTML = dbShops.length ? dbShops.map((s,i)=>`
     <div class="pcard">
-      <strong style="font-size:12px">${s.icon||'🏪'} ${s.name}</strong>
-      <p class="m">X:${s.x} Z:${s.z} · ${(s.items||[]).length} товаров</p>
-      <div class="acts">
+      <strong>${s.icon && !isUrl(s.icon)?s.icon:'🏪'} ${s.name}</strong>
+      <p class="m">X:${s.x} Z:${s.z} · ${(s.items||[]).length} тов.</p>
+      <div style="display:flex;gap:4px;margin-top:6px">
         <button class="btn btn-s btn-p" onclick="edSh(${i})">✏️</button>
         <button class="btn btn-s btn-danger" onclick="dlSh('${s.docId}')">🗑️</button>
       </div>
     </div>
-  `).join(''):'—';
-  const sel=document.getElementById('owS');
-  if(sel)sel.innerHTML='<option value="">—</option>'+dbShops.map(s=>`<option value="${s.docId}">${s.icon||'🏪'} ${s.name}</option>`).join('');
+  `).join('') : '—';
 }
-function openAS(){nsIt=[];['nsN','nsI','nsIm','nsD','nsX','nsZ'].forEach(id=>{const e=document.getElementById(id);if(e)e.value=''});rNI();sh('aSM')}
-function aNsI(){nsIt.push({name:'',icon:'📦',price:1,qty:''});rNI()}
+function openAS(){
+  nsIt=[];
+  ['nsN','nsI','nsIm','nsD','nsX','nsZ'].forEach(id=>{ const e=document.getElementById(id); if(e) e.value=''; });
+  rNI(); sh('aSM');
+}
+function aNsI(){ nsIt.push({name:'',icon:'📦',price:1,qty:''}); rNI(); }
 function rNI(){
-  document.getElementById('nsIL').innerHTML=nsIt.map((it,i)=>`
-    <div style="display:flex;gap:4px;margin-bottom:6px;align-items:flex-end;flex-wrap:wrap">
-      <div class="ig" style="width:36px"><input type="text" value="${it.icon}" placeholder="📦" onchange="nsIt[${i}].icon=this.value" style="text-align:center;padding:9px 2px"></div>
-      <div class="ig" style="flex:2;min-width:60px"><input type="text" value="${it.name}" placeholder="Название" onchange="nsIt[${i}].name=this.value"></div>
-      <div class="ig" style="flex:1;min-width:50px"><input type="number" value="${it.price}" placeholder="Цена" min="1" onchange="nsIt[${i}].price=+this.value||1"></div>
-      <div class="ig" style="width:50px"><input type="number" value="${it.qty!==undefined?it.qty:''}" placeholder="Шт" min="1" onchange="nsIt[${i}].qty=this.value===''?undefined:+this.value"></div>
+  document.getElementById('nsIL').innerHTML = nsIt.map((it,i)=>`
+    <div style="display:flex;gap:4px;margin-bottom:6px;flex-wrap:wrap;align-items:flex-end">
+      <div class="ig" style="width:70px"><label>Иконка/URL</label><input value="${it.icon||''}" onchange="nsIt[${i}].icon=this.value"></div>
+      <div class="ig" style="flex:2;min-width:80px"><label>Название</label><input value="${it.name||''}" onchange="nsIt[${i}].name=this.value"></div>
+      <div class="ig" style="width:60px"><label>Цена</label><input type="number" value="${it.price||1}" min="1" onchange="nsIt[${i}].price=+this.value||1"></div>
+      <div class="ig" style="width:60px"><label>Кол-во</label><input type="number" value="${it.qty??''}" placeholder="∞" min="0" onchange="nsIt[${i}].qty=this.value===''?undefined:+this.value"></div>
       <button class="btn btn-danger btn-s" onclick="nsIt.splice(${i},1);rNI()">×</button>
     </div>
   `).join('');
 }
-async function svShop(){const n=v('nsN');if(!n)return toast('Название!',1);await fdb.collection('shops').add({name:n,icon:v('nsI')||'🏪',image:v('nsIm'),desc:v('nsD'),x:+v('nsX')||0,z:+v('nsZ')||0,items:nsIt.filter(i=>i.name.trim())});cls('aSM');snd('ok');toast('Магазин добавлен!')}
+async function svShop(){
+  const n=v('nsN'); if(!n) return toast('Название!',1);
+  await fdb.collection('shops').add({
+    name:n, icon:v('nsI')||'🏪', image:v('nsIm'), desc:v('nsD'),
+    x:+v('nsX')||0, z:+v('nsZ')||0,
+    items: nsIt.filter(i=>i.name && i.name.trim()).map(i=>({
+      name:i.name.trim(), icon:i.icon||'📦', price:+i.price||1,
+      qty: (i.qty===undefined||i.qty===''||i.qty===null) ? undefined : +i.qty
+    }))
+  });
+  cls('aSM'); snd('ok'); toast('Магазин добавлен!');
+}
 function edSh(idx){
-  const s=dbShops[idx];if(!s)return;window._edShopDoc=s.docId;window._eit=JSON.parse(JSON.stringify(s.items||[]));
+  const s=dbShops[idx]; if(!s) return;
+  window._edShopDoc=s.docId;
+  window._eit=JSON.parse(JSON.stringify(s.items||[]));
   document.getElementById('esC').innerHTML=`
-    <div class="ig"><label>Название</label><input type="text" id="esN" value="${s.name}"></div>
-    <div class="ig"><label>Иконка URL</label><input type="text" id="esI" value="${s.icon||''}"></div>
-    <div class="ig"><label>Обложка URL</label><input type="text" id="esIm" value="${s.image||''}"></div>
+    <div class="ig"><label>Название</label><input id="esN" value="${s.name||''}"></div>
+    <div class="ig"><label>Иконка</label><input id="esI" value="${s.icon||''}"></div>
+    <div class="ig"><label>Обложка URL</label><input id="esIm" value="${s.image||''}"></div>
     <div class="ig"><label>Описание</label><textarea id="esD" rows="2">${s.desc||''}</textarea></div>
-    <div style="display:flex;gap:4px"><div class="ig" style="flex:1"><label>X</label><input type="number" id="esX" value="${s.x||0}"></div><div class="ig" style="flex:1"><label>Z</label><input type="number" id="esZ" value="${s.z||0}"></div></div>
+    <div style="display:flex;gap:6px"><div class="ig" style="flex:1"><label>X</label><input type="number" id="esX" value="${s.x||0}"></div><div class="ig" style="flex:1"><label>Z</label><input type="number" id="esZ" value="${s.z||0}"></div></div>
     <div class="sl">Товары</div><div id="esIL"></div>
     <button class="btn btn-o btn-s" style="margin-bottom:8px" onclick="aEI()">+ Товар</button>
-    <div style="display:flex;gap:4px"><button class="btn btn-p" style="flex:1" onclick="svES()">Сохранить</button><button class="btn btn-o" onclick="cls('eSM')">×</button></div>
-  `;rEI();sh('eSM');
+    <div style="display:flex;gap:6px"><button class="btn btn-p" style="flex:1" onclick="svES()">Сохранить</button><button class="btn btn-o" onclick="cls('eSM')">×</button></div>
+  `;
+  rEI(); sh('eSM');
 }
 function rEI(){
-  const c=document.getElementById('esIL');if(!c)return;
-  c.innerHTML=window._eit.map((it,i)=>`
-    <div style="display:flex;gap:4px;margin-bottom:5px;align-items:flex-end;flex-wrap:wrap">
-      <div class="ig" style="width:36px"><input type="text" value="${it.icon||'📦'}" onchange="window._eit[${i}].icon=this.value" style="text-align:center;padding:9px 2px"></div>
-      <div class="ig" style="flex:2;min-width:60px"><input type="text" value="${it.name}" onchange="window._eit[${i}].name=this.value"></div>
-      <div class="ig" style="flex:1;min-width:50px"><input type="number" value="${it.price}" onchange="window._eit[${i}].price=+this.value||1"></div>
-      <div class="ig" style="width:50px"><input type="number" value="${it.qty!==undefined?it.qty:''}" placeholder="Шт" onchange="window._eit[${i}].qty=this.value===''?undefined:+this.value"></div>
+  const c=document.getElementById('esIL'); if(!c) return;
+  c.innerHTML=(window._eit||[]).map((it,i)=>`
+    <div style="display:flex;gap:4px;margin-bottom:6px;flex-wrap:wrap;align-items:flex-end">
+      <div class="ig" style="width:70px"><label>Иконка</label><input value="${it.icon||'📦'}" onchange="window._eit[${i}].icon=this.value"></div>
+      <div class="ig" style="flex:2;min-width:80px"><label>Название</label><input value="${it.name||''}" onchange="window._eit[${i}].name=this.value"></div>
+      <div class="ig" style="width:60px"><label>Цена</label><input type="number" value="${it.price||1}" onchange="window._eit[${i}].price=+this.value||1"></div>
+      <div class="ig" style="width:60px"><label>Кол-во</label><input type="number" value="${it.qty??''}" placeholder="∞" onchange="window._eit[${i}].qty=this.value===''?undefined:+this.value"></div>
       <button class="btn btn-danger btn-s" onclick="window._eit.splice(${i},1);rEI()">×</button>
     </div>
   `).join('');
 }
-function aEI(){window._eit.push({name:'',icon:'📦',price:1,qty:undefined});rEI()}
-async function svES(){await fdb.collection('shops').doc(window._edShopDoc).update({name:v('esN')||'?',icon:v('esI')||'🏪',image:v('esIm'),desc:v('esD'),x:+v('esX')||0,z:+v('esZ')||0,items:window._eit.filter(i=>i.name.trim())});cls('eSM');snd('ok');toast('Обновлено!')}
-async function dlSh(docId){if(!confirm('Удалить?'))return;await fdb.collection('shops').doc(docId).delete();snd('c')}
-async function assOwn(){const n=v('owN'),sDocId=v('owS');if(!n||!sDocId)return;const owners={...dbOwners};if(!owners[sDocId])owners[sDocId]=[];if(!owners[sDocId].includes(n))owners[sDocId].push(n);await fdb.collection('config').doc('settings').set({owners},{merge:true});document.getElementById('owN').value='';toast('Владелец!')}
-function rOw(){const c=document.getElementById('owL');if(!Object.keys(dbOwners).length){c.innerHTML='—';return}let h='';for(let sDocId in dbOwners){const s=dbShops.find(x=>x.docId===sDocId);if(!s)continue;dbOwners[sDocId].forEach(n=>{h+=`<div class="pcard" style="display:flex;justify-content:space-between;align-items:center;padding:6px 10px"><span style="font-size:10px">${s.icon||'🏪'} ${s.name} → <b>${n}</b></span><button class="btn btn-danger btn-s" onclick="rmOw('${sDocId}','${n}')">×</button></div>`})}c.innerHTML=h||'—'}
-async function rmOw(sDocId,n){const owners={...dbOwners};if(owners[sDocId])owners[sDocId]=owners[sDocId].filter(x=>x!==n);await fdb.collection('config').doc('settings').set({owners},{merge:true})}
-async function adDep(){const n=v('adN'),a=parseInt(v('adA'));if(!n||!a)return toast('!',1);const uDoc=await fdb.collection('users').doc(n).get();if(!uDoc.exists)return toast('Не найден!',1);await fdb.collection('users').doc(n).update({balance:(uDoc.data().balance||0)+a,transactions:firebase.firestore.FieldValue.arrayUnion({desc:'+Пополнение',amount:a,date:new Date().toLocaleString('ru')})});document.getElementById('adN').value='';document.getElementById('adA').value='';snd('coin');toast(`+${a} → ${n}`)}
-async function setTp(){const n=v('ptN'),t=v('ptT');if(!n)return;const uDoc=await fdb.collection('users').doc(n).get();if(!uDoc.exists)return toast('Не найден!',1);await fdb.collection('users').doc(n).update({type:t});toast(`${n} → ${t}`)}
-function rAdP(){const p=dbOrders.filter(o=>o.status==='pending');document.getElementById('adP').innerHTML=p.length?p.map(o=>`<div class="pcard"><strong style="font-size:10px">${o.type==='delivery'?'📦':'🚀'} #${o.id} — ${o.user}</strong><p class="m">${o.total}${cH(10)} · ${o.payment==='cash'?'Нал':'Онлайн'} · ${o.date}</p><div class="acts"><button class="btn btn-s btn-ok" onclick="apOrd('${o.docId}')">✅</button><button class="btn btn-s btn-danger" onclick="rjOrd('${o.docId}')">❌</button></div></div>`).join(''):'✨'}
-async function apOrd(docId){await fdb.collection('orders').doc(docId).update({status:'approved'});toast('✅')}
-async function rjOrd(docId){const o=dbOrders.find(x=>x.docId===docId);if(!o)return;await fdb.collection('orders').doc(docId).update({status:'rejected'});if(o.payment==='online'){const uDoc=await fdb.collection('users').doc(o.user).get();if(uDoc.exists){await fdb.collection('users').doc(o.user).update({balance:(uDoc.data().balance||0)+o.total,transactions:firebase.firestore.FieldValue.arrayUnion({desc:`Возврат #${o.id}`,amount:o.total,date:new Date().toLocaleString('ru')})})}}toast('❌')}
-function rJA(){const a=dbJobApps.filter(x=>x.status==='pending');document.getElementById('adJ').innerHTML=a.length?a.map(x=>`<div class="pcard"><span style="font-size:10px"><b>${x.nick}</b> → ${x.job==='driver'?'📦':'🚀'}</span><div class="acts"><button class="btn btn-s btn-ok" onclick="apJ('${x.docId}','${x.nick}','${x.job}')">✅</button><button class="btn btn-s btn-danger" onclick="rjJ('${x.docId}')">❌</button></div></div>`).join(''):'—'}
-async function apJ(docId,nick,job){await fdb.collection('jobApps').doc(docId).update({status:'approved'});const ud=job==='driver'?{isDriver:true}:{isTaxiDriver:true};await fdb.collection('users').doc(nick).update(ud);toast('✅')}
-async function rjJ(docId){await fdb.collection('jobApps').doc(docId).update({status:'rejected'})}
-function rAdA(){const sl={pending:'⏳',approved:'✅',accepted:'🔧',delivering:'🚚',waiting_customer:'📦',done:'✓',rejected:'❌'};const sc={pending:'w',approved:'a',accepted:'t',delivering:'t',waiting_customer:'w',done:'a',rejected:'r'};document.getElementById('adAl').innerHTML=dbOrders.length?dbOrders.slice(0,30).map(o=>`<div class="pcard"><div style="display:flex;justify-content:space-between;flex-wrap:wrap"><strong style="font-size:9px">${o.type==='delivery'?'📦':'🚀'} #${o.id} — ${o.user}</strong><span class="sb ${sc[o.status]||'w'}">${sl[o.status]||'?'}</span></div><p class="m">${o.date} · ${o.total}${cH(10)}${o.worker?' 👷 '+o.worker:''}</p></div>`).join(''):'—'}
-function ldR(){const rd=document.getElementById('rtD'),rt=document.getElementById('rtT');if(rd)rd.value=dbRates.d||0.05;if(rt)rt.value=dbRates.t||0.03}
-async function svRt(){const rates={d:parseFloat(v('rtD'))||0.05,t:parseFloat(v('rtT'))||0.03};await fdb.collection('config').doc('settings').set({rates},{merge:true});toast('✓')}
+function aEI(){ window._eit=window._eit||[]; window._eit.push({name:'',icon:'📦',price:1,qty:undefined}); rEI(); }
+async function svES(){
+  await fdb.collection('shops').doc(window._edShopDoc).update({
+    name:v('esN')||'?', icon:v('esI')||'🏪', image:v('esIm'), desc:v('esD'),
+    x:+v('esX')||0, z:+v('esZ')||0,
+    items:(window._eit||[]).filter(i=>i.name&&i.name.trim()).map(i=>({
+      name:i.name.trim(), icon:i.icon||'📦', price:+i.price||1,
+      qty:(i.qty===undefined||i.qty===''||i.qty===null)?undefined:+i.qty
+    }))
+  });
+  cls('eSM'); snd('ok'); toast('Сохранено!');
+}
+async function dlSh(docId){ if(!confirm('Удалить магазин?')) return; await fdb.collection('shops').doc(docId).delete(); }
+async function adDep(){
+  const n=v('adN'), a=parseInt(v('adA'));
+  if(!n||!a) return toast('Заполни!',1);
+  const uDoc=await fdb.collection('users').doc(n).get();
+  if(!uDoc.exists) return toast('Не найден!',1);
+  await fdb.collection('users').doc(n).update({
+    balance: bal(uDoc.data().balance)+a,
+    transactions: firebase.firestore.FieldValue.arrayUnion({ desc:'+Админ', amount:a, date:new Date().toLocaleString('ru') })
+  });
+  document.getElementById('adN').value=''; document.getElementById('adA').value='';
+  snd('coin'); toast('+'+a+' → '+n);
+}
+async function setTp(){
+  const n=v('ptN'), t=v('ptT');
+  if(!n) return;
+  const uDoc=await fdb.collection('users').doc(n).get();
+  if(!uDoc.exists) return toast('Не найден!',1);
+  await fdb.collection('users').doc(n).update({ type:t });
+  toast(n+' → '+t);
+}
+function rAdP(){
+  const p=dbOrders.filter(o=>o.status==='pending');
+  document.getElementById('adP').innerHTML = p.length ? p.map(o=>`
+    <div class="pcard">
+      <strong>${o.type==='delivery'?'📦':'🚀'} #${o.id} — ${o.user}</strong>
+      <p class="m">${o.total} · ${o.payment==='cash'?'нал':'онлайн'} · ${o.date||''}</p>
+      <div style="display:flex;gap:4px;margin-top:6px">
+        <button class="btn btn-s btn-ok" onclick="apOrd('${o.docId}')">✅</button>
+        <button class="btn btn-s btn-danger" onclick="rjOrd('${o.docId}')">❌</button>
+      </div>
+    </div>
+  `).join('') : '✨ Нет заявок';
+}
+async function apOrd(docId){ await fdb.collection('orders').doc(docId).update({status:'approved'}); toast('✅'); }
+async function rjOrd(docId){
+  const o=dbOrders.find(x=>x.docId===docId); if(!o) return;
+  await fdb.collection('orders').doc(docId).update({status:'rejected'});
+  if(o.payment==='online'){
+    const uDoc=await fdb.collection('users').doc(o.user).get();
+    if(uDoc.exists){
+      await fdb.collection('users').doc(o.user).update({
+        balance: bal(uDoc.data().balance)+o.total,
+        transactions: firebase.firestore.FieldValue.arrayUnion({ desc:'Возврат #'+o.id, amount:o.total, date:new Date().toLocaleString('ru') })
+      });
+    }
+  }
+  toast('❌');
+}
+function rJA(){
+  const a=dbJobApps.filter(x=>x.status==='pending');
+  document.getElementById('adJ').innerHTML = a.length ? a.map(x=>`
+    <div class="pcard">
+      <span><b>${x.nick}</b> → ${x.job==='driver'?'📦':'🚀'}</span>
+      <div style="display:flex;gap:4px;margin-top:6px">
+        <button class="btn btn-s btn-ok" onclick="apJ('${x.docId}','${x.nick}','${x.job}')">✅</button>
+        <button class="btn btn-s btn-danger" onclick="rjJ('${x.docId}')">❌</button>
+      </div>
+    </div>
+  `).join('') : '—';
+}
+async function apJ(docId,nick,job){
+  await fdb.collection('jobApps').doc(docId).update({status:'approved'});
+  await fdb.collection('users').doc(nick).update(job==='driver'?{isDriver:true}:{isTaxiDriver:true});
+  toast(nick+' принят!');
+}
+async function rjJ(docId){ await fdb.collection('jobApps').doc(docId).update({status:'rejected'}); }
+function rAdA(){
+  const sl={pending:'⏳',approved:'✅',accepted:'🔧',delivering:'🚚',waiting_customer:'📦',done:'✓',rejected:'❌'};
+  const sc={pending:'w',approved:'a',accepted:'t',delivering:'t',waiting_customer:'w',done:'a',rejected:'r'};
+  document.getElementById('adAl').innerHTML = dbOrders.length ? dbOrders.slice(0,40).map(o=>`
+    <div class="pcard">
+      <div style="display:flex;justify-content:space-between"><strong style="font-size:11px">${o.type==='delivery'?'📦':'🚀'} #${o.id} — ${o.user}</strong><span class="sb ${sc[o.status]||'w'}">${sl[o.status]||'?'}</span></div>
+      <p class="m">${o.date||''} · ${o.total}${o.worker?' · 👷'+o.worker:''}</p>
+    </div>
+  `).join('') : '—';
+}
+function ldR(){
+  const rd=document.getElementById('rtD'), rt=document.getElementById('rtT');
+  if(rd) rd.value = dbRates.d || 0.05;
+  if(rt) rt.value = dbRates.t || 0.03;
+}
+async function svRt(){
+  const rates={ d:parseFloat(v('rtD'))||0.05, t:parseFloat(v('rtT'))||0.03 };
+  await fdb.collection('config').doc('settings').set({ rates }, { merge:true });
+  toast('Ставки сохранены!');
+}
 
-document.addEventListener('click',e=>{if(e.target.classList.contains('modal')||e.target.classList.contains('profile-overlay'))e.target.classList.add('h')});
-window.addEventListener('load',()=>{setLang(curLang);initFirebase();tryAuto()});
+// close modals
+document.addEventListener('click', e=>{
+  if(e.target.classList.contains('modal') || e.target.classList.contains('profile-overlay')) e.target.classList.add('h');
+});
+
+// START
+window.addEventListener('load', ()=>{
+  try{ setLang(curLang); }catch(e){}
+  try{ initFirebase(); }catch(e){ console.error(e); hideLoad(); }
+  // страховка: через 2 сек точно убрать загрузку
+  setTimeout(hideLoad, 2000);
+  tryAuto();
+});
 </script>
 </body>
 </html>
