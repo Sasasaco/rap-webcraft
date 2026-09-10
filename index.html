@@ -50,7 +50,6 @@ body{background:var(--bg);color:var(--t);min-height:100vh}
 .spinner{display:inline-block;width:13px;height:13px;border:2px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:spin .5s linear infinite;margin-right:4px}
 .cur{width:14px;height:14px;vertical-align:middle;image-rendering:pixelated}
 .cur-x{width:30px;height:30px;vertical-align:middle;image-rendering:pixelated}
-
 header{background:rgba(10,10,10,.95);padding:8px 4%;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--b);position:sticky;top:0;z-index:100;backdrop-filter:blur(15px);flex-wrap:wrap;gap:5px}
 .logo{font-size:26px;font-weight:900;background:linear-gradient(135deg,#ef4444,#f59e0b,#8b5cf6);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-size:200%;animation:grad 3s infinite;cursor:pointer}
 .ui{display:flex;align-items:center;gap:5px;font-size:11px;flex-wrap:wrap}
@@ -61,61 +60,43 @@ header{background:rgba(10,10,10,.95);padding:8px 4%;display:flex;justify-content
 .lo{background:none;border:1px solid var(--b);color:var(--tm);padding:3px 8px;border-radius:5px;cursor:pointer;font-size:10px;font-weight:600}
 .lo:hover{border-color:var(--p);color:var(--p)}
 .lang-sel{background:var(--ci);border:1px solid var(--b);color:var(--tm);padding:3px 6px;border-radius:5px;font-size:10px;cursor:pointer;outline:none}
-
 .tabs{display:flex;justify-content:center;gap:3px;padding:10px 4%;flex-wrap:wrap}
 .tb{padding:7px 14px;border-radius:8px;border:1px solid var(--b);background:var(--c1);color:var(--tm);font-size:11px;font-weight:700;cursor:pointer;transition:.3s;position:relative}
 .tb:hover{border-color:var(--b2);color:var(--t)}
-.tb.a-del{border-color:var(--del);color:var(--del)}
-.tb.a-taxi{border-color:var(--taxi);color:var(--taxi)}
-.tb.a-bank{border-color:var(--bank);color:var(--bank)}
-.tb.a-ord{border-color:var(--ok);color:var(--ok)}
-.tb.a-adm{border-color:var(--p);color:var(--p)}
-.tb.a-work{border-color:var(--taxi);color:var(--taxi)}
-.tb.a-myshop{border-color:var(--del);color:var(--del)}
+.tb.a-del{border-color:var(--del);color:var(--del)}.tb.a-taxi{border-color:var(--taxi);color:var(--taxi)}.tb.a-bank{border-color:var(--bank);color:var(--bank)}.tb.a-ord{border-color:var(--ok);color:var(--ok)}.tb.a-adm{border-color:var(--p);color:var(--p)}.tb.a-work{border-color:var(--taxi);color:var(--taxi)}
 .tb .ntf{position:absolute;top:-3px;right:-3px;background:var(--p);color:#fff;width:14px;height:14px;border-radius:50%;font-size:8px;font-weight:800;display:flex;align-items:center;justify-content:center;animation:pulse 1s infinite}
-
 .panel{display:none;max-width:900px;margin:0 auto;padding:0 4% 40px}.panel.active{display:block;animation:fadeIn .4s}
 .pt{font-size:20px;font-weight:900;text-align:center;background:linear-gradient(135deg,#ef4444,#f59e0b,#8b5cf6);-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:2px}
 .ps{text-align:center;color:var(--tm);margin-bottom:16px;font-size:11px}
 .sl{font-size:9px;font-weight:800;color:var(--tm);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px}
 .g2{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:8px;margin-bottom:12px}
 .g3{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:8px;margin-bottom:12px}
-
 .card{background:var(--c1);border-radius:12px;padding:16px;border:1px solid var(--b);transition:.3s;position:relative}
 .card:hover{border-color:var(--b2);transform:translateY(-3px)}
 .card.click{cursor:pointer}.card.sel{border-color:var(--p);box-shadow:0 0 15px var(--pg)}
 .card h3{font-size:14px;font-weight:800;margin-bottom:4px}.card .m{font-size:11px;color:var(--tm);line-height:1.4}
 .shop-img{width:100%;height:120px;object-fit:cover;border-radius:8px;margin-bottom:8px;border:1px solid var(--b)}
-
 .rating-badge{display:inline-flex;align-items:center;gap:3px;background:rgba(245,158,11,.15);color:var(--del);padding:2px 6px;border-radius:6px;font-size:10px;font-weight:800;border:1px solid rgba(245,158,11,.3);margin-top:4px}
 .star-btn{cursor:pointer;font-size:22px;color:var(--b2);transition:.2s}.star-btn.on{color:var(--del)}.star-btn:hover{transform:scale(1.2)}
-
 .ilist{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;margin-bottom:16px;animation:fadeIn .3s}
 .irow{background:var(--c1);border:1px solid var(--b);border-radius:12px;padding:14px;transition:.3s;display:flex;flex-direction:column;align-items:center;text-align:center}
-.irow:hover{border-color:var(--p);transform:translateY(-4px);box-shadow:0 8px 25px rgba(239,68,68,.1)}
+.irow:hover{border-color:var(--p);transform:translateY(-4px)}
 .iicon{font-size:32px;width:64px;height:64px;background:var(--ci);border-radius:12px;display:flex;align-items:center;justify-content:center;margin-bottom:8px;border:1px solid var(--b);overflow:hidden}
 .iicon img{width:100%;height:100%;object-fit:cover}
 .ititle{font-size:13px;font-weight:700;color:var(--t);margin-bottom:4px}
-.iprice{color:var(--ok);font-weight:800;font-size:13px;background:rgba(16,185,129,.1);padding:4px 10px;border-radius:8px;margin-bottom:12px;display:inline-flex;align-items:center;gap:4px;border:1px solid rgba(16,185,129,.2)}
+.iprice{color:var(--ok);font-weight:800;font-size:13px;background:rgba(16,185,129,.1);padding:4px 10px;border-radius:8px;margin-bottom:8px;display:inline-flex;align-items:center;gap:4px}
+.istock{font-size:10px;color:var(--tm);margin-bottom:8px}
 .qc{display:flex;align-items:center;justify-content:space-between;background:var(--ci);border-radius:8px;padding:4px;border:1px solid var(--b);width:100%}
-.qb{width:32px;height:32px;border-radius:6px;border:none;background:var(--c2);color:var(--t);font-size:16px;cursor:pointer;transition:.2s;font-weight:700}
-.qb:hover{background:var(--p);color:#fff}.qb:active{transform:scale(.88)}
+.qb{width:32px;height:32px;border-radius:6px;border:none;background:var(--c2);color:var(--t);font-size:16px;cursor:pointer;font-weight:700}
+.qb:hover{background:var(--p);color:#fff}
 .qv{font-weight:800;font-size:14px;width:30px;text-align:center}
-
 .cart{background:var(--c1);border-radius:12px;padding:16px;border:1px solid var(--b);margin-bottom:16px}
 .cart h3{margin-bottom:10px;font-size:14px}.ci-r{display:flex;justify-content:space-between;padding:4px 0;font-size:12px}
 .ct{border-top:2px solid var(--b2);margin-top:8px;padding-top:8px;display:flex;justify-content:space-between;font-weight:800;font-size:14px;color:var(--p)}
-
-.map-wrapper{position:relative;width:100%;height:55vh;min-height:350px;border-radius:12px;overflow:hidden;border:1px solid var(--b);margin-bottom:12px;box-shadow:0 10px 30px rgba(0,0,0,.3)}
-.map-frame{width:100%;height:100%;border:none}
-.map-overlay{position:absolute;top:10px;right:10px;z-index:10}
-.map-overlay-bottom{position:absolute;bottom:10px;left:10px;right:10px;background:rgba(10,10,10,.85);backdrop-filter:blur(10px);padding:10px;border-radius:10px;border:1px solid rgba(255,255,255,.1);display:flex;gap:8px;align-items:center}
-.map-btn{background:rgba(20,20,20,.8);backdrop-filter:blur(5px);border:1px solid rgba(255,255,255,.2);color:#fff;padding:6px 12px;border-radius:8px;font-size:11px;font-weight:700;cursor:pointer;transition:.3s}
-.map-btn:hover{background:var(--p);border-color:var(--p)}
-
+.map-frame{width:100%;height:55vh;min-height:300px;border-radius:12px;border:1px solid var(--b);margin-bottom:8px}
 .payopts{display:flex;gap:8px;margin-bottom:10px}
-.payopt{flex:1;padding:10px;border-radius:8px;border:1px solid var(--b);background:var(--ci);color:var(--t);cursor:pointer;text-align:center;font-weight:700;font-size:12px;transition:.3s}
-.payopt.sel{border-color:var(--p);box-shadow:0 0 10px var(--pg);background:rgba(239,68,68,.05)}
+.payopt{flex:1;padding:10px;border-radius:8px;border:1px solid var(--b);background:var(--ci);color:var(--t);cursor:pointer;text-align:center;font-weight:700;font-size:12px}
+.payopt.sel{border-color:var(--p);box-shadow:0 0 10px var(--pg)}
 .bdisp{font-size:32px;font-weight:900;color:var(--bank);margin:10px 0;display:flex;align-items:center;justify-content:center;gap:8px}
 .txs{background:var(--c1);border-radius:12px;padding:16px;border:1px solid var(--b)}
 .txr{display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid var(--b);font-size:11px}.txr:last-child{border-bottom:none}
@@ -126,23 +107,19 @@ header{background:rgba(10,10,10,.95);padding:8px 4%;display:flex;justify-content
 .asec{margin-bottom:20px}.asec h3{margin-bottom:10px;padding-bottom:6px;border-bottom:1px solid var(--b);font-size:14px}
 .pcard{background:var(--c1);border-radius:10px;padding:12px;border:1px solid var(--b);margin-bottom:8px}
 .pcard .acts{display:flex;gap:5px;margin-top:7px;flex-wrap:wrap}
-
 .chat-box{background:var(--c1);border-radius:12px;padding:15px;width:92%;max-width:400px;border:1px solid var(--b);display:flex;flex-direction:column;height:70vh}
 .chat-msgs{flex:1;overflow-y:auto;padding:10px;background:var(--ci);border-radius:8px;border:1px solid var(--b);margin-bottom:10px;display:flex;flex-direction:column;gap:8px}
-.msg{max-width:85%;padding:6px 10px;border-radius:10px;font-size:12px;line-height:1.4}
-.msg.my{background:var(--p);color:#fff;align-self:flex-end;border-bottom-right-radius:2px}
-.msg.other{background:var(--b2);color:var(--t);align-self:flex-start;border-bottom-left-radius:2px}
-.msg-time{font-size:8px;opacity:.7;margin-top:3px;text-align:right}
-
+.msg{max-width:85%;padding:6px 10px;border-radius:10px;font-size:12px}
+.msg.my{background:var(--p);color:#fff;align-self:flex-end}.msg.other{background:var(--b2);color:var(--t);align-self:flex-start}
 .review-card{background:var(--ci);border:1px solid var(--b);border-radius:10px;padding:10px;margin-bottom:8px}
-.react-btn{background:var(--c1);border:1px solid var(--b);border-radius:6px;padding:2px 6px;font-size:10px;cursor:pointer;display:inline-flex;align-items:center;gap:4px}
-.react-btn:hover{background:var(--b2)} .react-btn.on{background:var(--pg);border-color:var(--p)}
-
+.react-btn{background:var(--c1);border:1px solid var(--b);border-radius:6px;padding:2px 6px;font-size:10px;cursor:pointer}
+.react-btn.on{background:var(--pg);border-color:var(--p)}
 .profile-overlay{position:fixed;inset:0;background:rgba(0,0,0,.85);display:flex;align-items:center;justify-content:center;z-index:1100;backdrop-filter:blur(6px)}
 .profile-box{background:var(--c1);border-radius:16px;padding:24px;width:92%;max-width:440px;border:1px solid var(--b);max-height:88vh;overflow-y:auto;animation:scaleIn .3s}
+.av-big{width:64px;height:64px;border-radius:10px;image-rendering:pixelated;border:2px solid var(--b);margin:0 auto 8px;display:block}
 .pstats{display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap}
 .stat{flex:1;min-width:65px;background:var(--ci);border-radius:8px;padding:10px;text-align:center;border:1px solid var(--b)}
-.stat .v{font-size:18px;font-weight:800;color:var(--p)}.stat .l{font-size:9px;color:var(--tm);text-transform:uppercase;margin-top:2px}
+.stat .v{font-size:18px;font-weight:800;color:var(--p)}.stat .l{font-size:9px;color:var(--tm);text-transform:uppercase}
 .psec{margin-bottom:14px}.psec h4{font-size:12px;font-weight:700;margin-bottom:8px;padding-bottom:5px;border-bottom:1px solid var(--b)}
 .loc{background:var(--ci);border-radius:8px;padding:10px;border:1px solid var(--b);margin-bottom:6px}.loc h5{font-size:11px;font-weight:700;margin-bottom:4px}
 .modal{position:fixed;inset:0;background:rgba(0,0,0,.85);display:flex;align-items:center;justify-content:center;z-index:1100;backdrop-filter:blur(6px)}
@@ -152,98 +129,80 @@ header{background:rgba(10,10,10,.95);padding:8px 4%;display:flex;justify-content
 .toast.show{transform:translateY(0);opacity:1}.toast.err{background:linear-gradient(135deg,#ef4444,#7f1d1d)}
 .work-order{background:var(--c1);border-radius:12px;padding:16px;border:1px solid var(--b);margin-bottom:10px;position:relative;overflow:hidden}
 .work-order::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,#ef4444,#f59e0b,#8b5cf6)}
-.work-order .reward{font-size:18px;font-weight:900;color:var(--ok);margin:6px 0}
-.badge-new{position:absolute;top:10px;right:10px;background:var(--adm);color:white;padding:2px 8px;border-radius:10px;font-size:9px;font-weight:800;animation:pulse 1s infinite}
+.reward{font-size:16px;font-weight:900;color:var(--ok);margin:4px 0}
+.badge-new{position:absolute;top:8px;right:8px;background:var(--p);color:#fff;padding:2px 8px;border-radius:8px;font-size:9px;font-weight:800;animation:pulse 1s infinite}
 .user-row{display:flex;align-items:center;gap:8px;padding:8px 0;border-bottom:1px solid var(--b);font-size:12px}.user-row:last-child{border-bottom:none}
 .user-row img{width:24px;height:24px;border-radius:5px;image-rendering:pixelated}
 .online-dot{width:8px;height:8px;border-radius:50%}.online-dot.on{background:var(--ok)}.online-dot.off{background:var(--td)}
 .server-pos-badge{background:rgba(16,185,129,.1);border:1px solid rgba(16,185,129,.25);border-radius:10px;padding:10px;margin-bottom:12px;text-align:center}
-.pref-b{background:linear-gradient(135deg,#8b5cf6,#7c3aed);color:#fff;padding:2px 6px;border-radius:6px;font-size:9px;font-weight:800;margin-right:6px;vertical-align:middle;box-shadow:0 0 5px rgba(139,92,246,.3)}
+.online-badge{background:rgba(16,185,129,.15);color:var(--ok);padding:1px 6px;border-radius:5px;font-size:9px;font-weight:700}
+.pref-b{background:linear-gradient(135deg,#8b5cf6,#7c3aed);color:#fff;padding:2px 6px;border-radius:6px;font-size:9px;font-weight:800;margin-right:6px;vertical-align:middle}
 .loading-screen{position:fixed;inset:0;background:var(--bg);display:flex;align-items:center;justify-content:center;z-index:2000;flex-direction:column;gap:10px}
 .loading-screen h1{font-size:36px;font-weight:900;background:linear-gradient(135deg,#ef4444,#f59e0b,#8b5cf6);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
 .loading-screen .spinner{width:24px;height:24px;border-width:3px}
-@media(max-width:600px){header{flex-direction:column}.tabs{gap:2px}.tb{padding:6px 8px;font-size:10px}.payopts{flex-direction:column}.g2,.g3{grid-template-columns:1fr}}
+@media(max-width:600px){header{flex-direction:column}.tabs{gap:2px}.tb{padding:6px 8px;font-size:10px}.g2,.g3{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
 <div class="loading-screen" id="loadScr"><h1>RAP</h1><div class="spinner"></div><p style="color:var(--tm);font-size:11px">Загрузка...</p></div>
 
 <div class="overlay h" id="authScr"><div class="auth">
-<div class="mc-head" id="aAv">⛏️</div><h2>RAP</h2><p class="sub" data-t="auth_sub">Доставка · Такси · Банк</p>
-<div style="margin-bottom:10px"><select class="lang-sel" onchange="setLang(this.value)"><option value="ru">🇷🇺 Русский</option><option value="en">🇬🇧 English</option><option value="be">🇧🇾 Беларуская</option><option value="uk">🇺🇦 Українська</option></select></div>
-<div class="atabs"><button class="atab on" onclick="aTab('login')" data-t="login_tab">Вход</button><button class="atab" onclick="aTab('reg')" data-t="reg_tab">Регистрация</button><button class="atab" onclick="aTab('reset')" data-t="reset_tab">Забыл</button></div>
-
-<div class="af on" id="f-login"><div class="ig"><label data-t="nick_label">Minecraft ник</label><input type="text" id="lN" placeholder="Ник" oninput="pSkin('lN')"></div><div class="ig"><label data-t="pass_label">Пароль</label><input type="password" id="lP" placeholder="Пароль"></div><p class="err" id="lE"></p><button class="btn btn-p" style="margin-top:4px" id="loginBtn" onclick="doLogin()" data-t="login_btn">Войти ⛏️</button></div>
-
-<div class="af" id="f-reg"><div class="ig"><label data-t="nick_label">Minecraft ник</label><input type="text" id="rN" placeholder="Steve" oninput="pSkin('rN')"></div><div class="ig"><label data-t="email_label">Google почта</label><input type="email" id="rE" placeholder="mail@gmail.com"></div><div class="ig"><label data-t="pass_label">Пароль</label><input type="password" id="rP" placeholder="Мин. 4"></div><div class="ig"><label data-t="pass2_label">Повторите</label><input type="password" id="rP2"></div><p class="err" id="rErr"></p><button class="btn btn-p" style="margin-top:4px" id="regBtn" onclick="doReg()" data-t="reg_btn">Создать</button></div>
-
-<div class="af" id="f-reset"><div class="ig"><label data-t="nick_label">Minecraft ник</label><input type="text" id="rsN" placeholder="Ник"></div><p class="err" id="rsE"></p><button class="btn btn-p" id="rsBtn" onclick="doReset()" data-t="reset_btn">Сбросить пароль</button><p style="color:var(--tm);font-size:10px;margin-top:8px">Новый пароль придёт на почту</p></div>
-
-<div class="af" id="f-verify"><div style="font-size:40px;margin-bottom:6px">📧</div><p style="color:var(--tm);font-size:10px" data-t="code_sent">Код отправлен на</p><p style="color:var(--p);font-weight:700;margin-bottom:10px" id="vEm"></p><div class="ig"><label data-t="code_label">Код из письма</label><input type="text" id="vC" maxlength="6" style="text-align:center;font-size:18px;letter-spacing:4px;font-weight:800"></div><p class="err" id="vE"></p><button class="btn btn-p" onclick="doVerify()" data-t="verify_btn">Подтвердить ✓</button><button class="btn btn-o btn-s" style="margin-top:6px;width:100%" id="resendBtn" onclick="resendCode()" data-t="resend_btn">Отправить повторно</button></div>
+<div class="mc-head" id="aAv">⛏️</div><h2>RAP</h2><p class="sub">Доставка · Такси · Банк</p>
+<div class="atabs"><button class="atab on" onclick="aTab('login')">Вход</button><button class="atab" onclick="aTab('reg')">Регистрация</button><button class="atab" onclick="aTab('reset')">Забыл</button></div>
+<div class="af on" id="f-login"><div class="ig"><label>Minecraft ник</label><input type="text" id="lN" oninput="pSkin('lN')"></div><div class="ig"><label>Пароль</label><input type="password" id="lP"></div><p class="err" id="lE"></p><button class="btn btn-p" style="margin-top:4px" id="loginBtn" onclick="doLogin()">Войти ⛏️</button></div>
+<div class="af" id="f-reg"><div class="ig"><label>Minecraft ник</label><input type="text" id="rN" oninput="pSkin('rN')"></div><div class="ig"><label>Google почта</label><input type="email" id="rE"></div><div class="ig"><label>Пароль</label><input type="password" id="rP"></div><div class="ig"><label>Повторите</label><input type="password" id="rP2"></div><p class="err" id="rErr"></p><button class="btn btn-p" style="margin-top:4px" id="regBtn" onclick="doReg()">Создать</button></div>
+<div class="af" id="f-reset"><div class="ig"><label>Minecraft ник</label><input type="text" id="rsN"></div><p class="err" id="rsE"></p><button class="btn btn-p" id="rsBtn" onclick="doReset()">Сбросить пароль</button></div>
+<div class="af" id="f-verify"><div style="font-size:40px">📧</div><p style="color:var(--tm);font-size:10px">Код отправлен на</p><p style="color:var(--p);font-weight:700;margin-bottom:10px" id="vEm"></p><div class="ig"><label>Код</label><input type="text" id="vC" maxlength="6" style="text-align:center;font-size:18px;letter-spacing:4px;font-weight:800"></div><p class="err" id="vE"></p><button class="btn btn-p" onclick="doVerify()">Подтвердить ✓</button><button class="btn btn-o btn-s" style="margin-top:6px;width:100%" id="resendBtn" onclick="resendCode()">Повторно</button></div>
 </div></div>
 
-<header id="hdr" style="display:none"><div class="logo">RAP</div><div class="ui"><img class="av" id="hAv" src="" onclick="openProf()"><span class="nk" id="hNk" onclick="openProf()"></span><span class="adb h" id="hAd">OWNER</span><div class="bal"><img class="cur" src="https://i.imgur.com/mxv6EO1.png" onerror="this.outerHTML='💎'"><span id="hBal">0</span></div><select class="lang-sel" onchange="setLang(this.value)" id="hLang"><option value="ru">🇷🇺</option><option value="en">🇬🇧</option><option value="be">🇧🇾</option><option value="uk">🇺🇦</option></select><button class="lo" onclick="logout()" data-t="logout">Выйти</button></div></header>
+<header id="hdr" style="display:none"><div class="logo">RAP</div><div class="ui"><img class="av" id="hAv" src="" onclick="openProf()"><span class="nk" id="hNk" onclick="openProf()"></span><span class="adb h" id="hAd">OWNER</span><div class="bal"><img class="cur" src="https://i.imgur.com/mxv6EO1.png"><span id="hBal">0</span></div><button class="lo" onclick="logout()">Выйти</button></div></header>
 
 <div class="tabs h" id="tC">
-<button class="tb" onclick="sTab('delivery',this)" id="tD" data-t="tab_del">📦 Доставка</button>
-<button class="tb" onclick="sTab('taxi',this)" id="tT" data-t="tab_taxi">🚀 Такси</button>
-<button class="tb" onclick="sTab('bank',this)" id="tB" data-t="tab_bank">🏦 Банк</button>
-<button class="tb" onclick="sTab('orders',this)" id="tO" data-t="tab_orders">📋 Заказы</button>
-<button class="tb h" onclick="sTab('work',this)" id="tW" data-t="tab_work">💼 Работа</button>
+<button class="tb" onclick="sTab('delivery',this)" id="tD">📦 Доставка</button>
+<button class="tb" onclick="sTab('taxi',this)" id="tT">🚀 Такси</button>
+<button class="tb" onclick="sTab('bank',this)" id="tB">🏦 Банк</button>
+<button class="tb" onclick="sTab('orders',this)" id="tO">📋 Заказы</button>
+<button class="tb h" onclick="sTab('work',this)" id="tW">💼 Работа</button>
 <button class="tb h" onclick="sTab('myshop',this)" id="tS">🏪 Мои магазины</button>
 <button class="tb h" onclick="sTab('admin',this)" id="tA">🔧 Админ</button>
 </div>
 
-<div class="panel" id="p-delivery"><h2 class="pt" data-t="del_title">📦 Доставка</h2><p class="ps" data-t="del_sub">Магазин → товары → точка → заказ</p><div class="sl" data-t="shops">🏪 Магазины</div><div class="g3" id="dsG"></div><div class="h" id="dsI"><div class="sl"><h3 id="dsT" style="font-size:14px;color:var(--t)"></h3></div><div id="dsIL" class="ilist"></div></div><div class="h" id="dsC"><div class="cart"><h3 data-t="cart">🛒 Корзина</h3><div id="dsCL"></div><div class="ci-r" style="color:var(--del)"><span data-t="delivery_fee">🚚 Доставка</span><span id="dsF">—</span></div><div class="ct"><span data-t="total">Итого:</span><span id="dsTot">0</span></div></div></div><div class="h" id="dsM"><div class="sl" data-t="pick_point">📍 Точка доставки</div>
-<div class="map-wrapper">
-    <div class="map-overlay"><button class="map-btn" onclick="document.getElementById('map1').requestFullscreen()">🔲 На весь экран</button></div>
-    <iframe src="https://mc-webcraft.ru/map/" class="map-frame" id="map1"></iframe>
-    <div class="map-overlay-bottom">
-        <button class="btn btn-bank btn-s" onclick="getOnlinePlayers()">🌍 Онлайн</button>
-        <select class="online-select" id="delPlr" style="flex:1;padding:8px;background:var(--ci);color:var(--t);border:1px solid rgba(255,255,255,0.2);border-radius:6px;font-size:11px;outline:none"><option value="">— Выбери игрока онлайн —</option></select>
-    </div>
-</div>
-<div style="display:flex;gap:8px;margin-bottom:14px"><div class="ig" style="flex:1"><label>X</label><input type="number" id="delX" oninput="uDCC()"></div><div class="ig" style="flex:1"><label>Z</label><input type="number" id="delZ" oninput="uDCC()"></div></div><div class="h" id="dsP"><div class="sl" data-t="payment">💳 Оплата</div><div class="payopts"><div class="payopt sel" onclick="sPay('online',this)"><img class="cur" src="https://i.imgur.com/mxv6EO1.png" onerror="this.outerHTML='💎'"> <span data-t="online">Онлайн</span></div><div class="payopt" onclick="sPay('cash',this)" data-t="cash">🤝 Наличные</div></div><div class="ig"><label data-t="comment">Комментарий</label><textarea id="dCom" rows="2"></textarea></div><button class="btn btn-del" style="width:100%" onclick="placeDel()" data-t="place_order">Оформить 📦</button></div></div></div>
+<div class="panel" id="p-delivery"><h2 class="pt">📦 Доставка</h2><p class="ps">Магазин → товары → точка → заказ</p><div class="sl">🏪 Магазины</div><div class="g3" id="dsG"></div><div class="h" id="dsI"><h3 id="dsT" style="font-size:14px"></h3><div id="dsIL" class="ilist"></div></div><div class="h" id="dsC"><div class="cart"><h3>🛒 Корзина</h3><div id="dsCL"></div><div class="ci-r" style="color:var(--del)"><span>🚚 Доставка</span><span id="dsF">—</span></div><div class="ct"><span>Итого:</span><span id="dsTot">0</span></div></div></div><div class="h" id="dsM"><div class="sl">📍 Точка доставки</div>
+<iframe src="https://mc-webcraft.ru/map/" class="map-frame" id="map1"></iframe>
+<div style="margin-bottom:10px"><button class="btn btn-bank btn-s" style="width:100%" onclick="getOnlinePlayers()">🌍 Загрузить онлайн</button><select class="online-select" id="delPlr" style="width:100%;margin-top:4px;padding:6px;background:var(--ci);color:var(--t);border:1px solid var(--b);border-radius:4px"><option value="">— Выбери игрока —</option></select></div>
+<div style="display:flex;gap:6px;margin-bottom:10px"><div class="ig" style="flex:1"><label>X</label><input type="number" id="delX" oninput="uDCC()"></div><div class="ig" style="flex:1"><label>Z</label><input type="number" id="delZ" oninput="uDCC()"></div></div></div><div class="h" id="dsP"><div class="sl">💳 Оплата</div><div class="payopts"><div class="payopt sel" onclick="sPay('online',this)"><img class="cur" src="https://i.imgur.com/mxv6EO1.png"> Онлайн</div><div class="payopt" onclick="sPay('cash',this)">🤝 Наличные</div></div><div class="ig"><label>Комментарий</label><textarea id="dCom" rows="2"></textarea></div><button class="btn btn-del" style="width:100%" onclick="placeDel()">Оформить 📦</button></div></div>
 
-<div class="panel" id="p-taxi"><h2 class="pt" data-t="taxi_title">🚀 Такси</h2><p class="ps" data-t="taxi_sub">Элитра-экспресс</p>
-<div class="card" style="max-width:550px;margin:0 auto">
-    <div class="map-wrapper">
-        <div class="map-overlay"><button class="map-btn" onclick="document.getElementById('map2').requestFullscreen()">🔲 На весь экран</button></div>
-        <iframe src="https://mc-webcraft.ru/map/" class="map-frame" id="map2"></iframe>
-        <div class="map-overlay-bottom">
-            <button class="btn btn-bank btn-s" onclick="getOnlinePlayers()">🌍 Онлайн</button>
-            <select class="online-select" id="taxPlr" style="flex:1;padding:8px;background:var(--ci);color:var(--t);border:1px solid rgba(255,255,255,0.2);border-radius:6px;font-size:11px;outline:none"><option value="">— Выбери игрока (откуда забрать) —</option></select>
-        </div>
-    </div>
-    <div class="sl" data-t="from">📍 Откуда (забрать)</div><div style="display:flex;gap:8px;margin-bottom:10px"><div class="ig" style="flex:1"><label>X</label><input type="number" id="txFX" oninput="cTxP()"></div><div class="ig" style="flex:1"><label>Z</label><input type="number" id="txFZ" oninput="cTxP()"></div></div>
-    <div class="sl" data-t="to">📍 Куда (привезти)</div><div style="display:flex;gap:8px;margin-bottom:10px"><div class="ig" style="flex:1"><label>X</label><input type="number" id="txTX" oninput="cTxP()"></div><div class="ig" style="flex:1"><label>Z</label><input type="number" id="txTZ" oninput="cTxP()"></div></div>
-    
-    <div class="sl" data-t="payment">💳 Оплата</div>
+<div class="panel" id="p-taxi"><h2 class="pt">🚀 Такси</h2>
+<div class="card" style="max-width:500px;margin:0 auto">
+    <iframe src="https://mc-webcraft.ru/map/" class="map-frame" id="map2"></iframe>
+    <div class="sl" style="margin-top:10px">📍 Откуда (забрать)</div>
+    <div style="margin-bottom:6px"><button class="btn btn-bank btn-s" style="width:100%" onclick="getOnlinePlayers()">🌍 Загрузить онлайн</button><select class="online-select" id="taxPlr" style="width:100%;margin-top:4px;padding:6px;background:var(--ci);color:var(--t);border:1px solid var(--b);border-radius:4px"><option value="">— Выбери игрока —</option></select></div>
+    <div style="display:flex;gap:6px;margin-bottom:10px"><div class="ig" style="flex:1"><label>X</label><input type="number" id="txFX" oninput="cTxP()"></div><div class="ig" style="flex:1"><label>Z</label><input type="number" id="txFZ" oninput="cTxP()"></div></div>
+    <div class="sl">📍 Куда (привезти)</div>
+    <div style="display:flex;gap:6px;margin-bottom:10px"><div class="ig" style="flex:1"><label>X</label><input type="number" id="txTX" oninput="cTxP()"></div><div class="ig" style="flex:1"><label>Z</label><input type="number" id="txTZ" oninput="cTxP()"></div></div>
+    <div class="sl">💳 Оплата</div>
     <div class="payopts" id="taxPayOpts">
-        <div class="payopt sel" onclick="sPayTx('online',this)"><img class="cur" src="https://i.imgur.com/mxv6EO1.png" onerror="this.outerHTML='💎'"> <span data-t="online">Онлайн</span></div>
-        <div class="payopt" onclick="sPayTx('cash',this)" data-t="cash">🤝 Наличные</div>
+        <div class="payopt sel" onclick="sPayTx('online',this)"><img class="cur" src="https://i.imgur.com/mxv6EO1.png"> Онлайн</div>
+        <div class="payopt" onclick="sPayTx('cash',this)">🤝 Наличные</div>
     </div>
-    
-    <div id="txPr" style="text-align:center;margin:6px 0;color:var(--taxi);font-weight:800;font-size:16px"></div>
-    <div class="ig"><label data-t="comment">Комментарий</label><textarea id="txCom" rows="2"></textarea></div>
-    <button class="btn btn-taxi" style="width:100%" onclick="ordTx()" data-t="call_taxi">Вызвать 🚀</button>
+    <div id="txPr" style="text-align:center;margin:6px 0;color:var(--taxi);font-weight:800"></div>
+    <div class="ig"><label>Комментарий</label><textarea id="txCom" rows="2"></textarea></div>
+    <button class="btn btn-taxi" style="width:100%" onclick="ordTx()">Вызвать 🚀</button>
 </div></div>
 
-<div class="panel" id="p-bank"><h2 class="pt" data-t="bank_title">🏦 RAP Bank</h2><div class="g2"><div class="card" style="text-align:center"><h3 data-t="balance">Баланс</h3><div class="bdisp"><img class="cur-x" src="https://i.imgur.com/mxv6EO1.png" onerror="this.outerHTML='💎'"><span id="bB">0</span></div></div><div class="card"><h3 data-t="transfer">Перевод</h3><div class="ig"><label data-t="to_whom">Кому</label><input type="text" id="trN"></div><div class="ig"><label data-t="amount">Сумма</label><input type="number" id="trA" min="1"></div><button class="btn btn-bank btn-s" onclick="doTr()">→</button></div></div>
+<div class="panel" id="p-bank"><h2 class="pt">🏦 RAP Bank</h2><div class="g2"><div class="card" style="text-align:center"><h3>Баланс</h3><div class="bdisp"><img class="cur-x" src="https://i.imgur.com/mxv6EO1.png"><span id="bB">0</span></div></div><div class="card"><h3>Перевод</h3><div class="ig"><label>Кому</label><input type="text" id="trN"></div><div class="ig"><label>Сумма</label><input type="number" id="trA" min="1"></div><button class="btn btn-bank btn-s" onclick="doTr()">→</button></div></div>
 <div class="g2">
-    <div class="txs" style="margin-top:10px"><h3 style="font-size:12px" data-t="history">📜 История</h3><div id="txH"></div></div>
+    <div class="txs" style="margin-top:10px"><h3 style="font-size:12px">📜 История</h3><div id="txH"></div></div>
     <div class="txs" style="margin-top:10px"><h3 style="font-size:12px">🏆 Топ покупателей</h3><div id="topB"></div></div>
 </div></div>
 
-<div class="panel" id="p-orders"><h2 class="pt" data-t="orders_title">📋 Заказы</h2><div id="oL"></div></div>
-
-<div class="panel" id="p-work"><h2 class="pt" data-t="work_title">💼 Работа</h2><div class="sl" data-t="avail_del">📦 Доставки</div><div id="wDel"></div><div class="sl" style="margin-top:18px" data-t="avail_taxi">🚀 Такси</div><div id="wTaxi"></div><div class="sl" style="margin-top:18px" data-t="my_active">✅ Активные</div><div id="wAct"></div></div>
-
-<div class="panel" id="p-myshop"><h2 class="pt" style="color:var(--del)">🏪 Мои магазины</h2><p class="ps">Управление товарами</p><div id="myShopsL"></div></div>
+<div class="panel" id="p-orders"><h2 class="pt">📋 Заказы</h2><div id="oL"></div></div>
+<div class="panel" id="p-work"><h2 class="pt">💼 Работа</h2><div class="sl">📦 Доставки</div><div id="wDel"></div><div class="sl" style="margin-top:14px">🚀 Такси</div><div id="wTaxi"></div><div class="sl" style="margin-top:14px">✅ Активные</div><div id="wAct"></div></div>
+<div class="panel" id="p-myshop"><h2 class="pt">🏪 Мои магазины</h2><div id="myShopsL"></div></div>
 
 <div class="panel" id="p-admin"><h2 class="pt">🔧 Админка</h2>
 <div class="asec"><h3>👥 Пользователи</h3><div id="adUsers"></div></div>
-<div class="asec"><h3>🏷️ Выдать префикс</h3><div style="display:flex;gap:4px;flex-wrap:wrap;align-items:flex-end"><div class="ig" style="flex:1;min-width:80px"><label>Ник</label><input type="text" id="pxN"></div><div class="ig" style="flex:1"><label>Префикс (напр: VIP)</label><input type="text" id="pxP" placeholder="VIP"></div><button class="btn btn-del btn-s" onclick="setPrefix()">✓</button></div></div>
+<div class="asec"><h3>🏷️ Выдать префикс</h3><div style="display:flex;gap:4px;flex-wrap:wrap;align-items:flex-end"><div class="ig" style="flex:1;min-width:80px"><label>Ник</label><input type="text" id="pxN"></div><div class="ig" style="flex:1"><label>Префикс</label><input type="text" id="pxP" placeholder="VIP"></div><button class="btn btn-del btn-s" onclick="setPrefix()">✓</button></div></div>
 <div class="asec"><h3>🏪 Магазины</h3><button class="btn btn-p btn-s" style="margin-bottom:8px" onclick="openAS()">+</button><div id="adS"></div></div>
 <div class="asec"><h3>👥 Владельцы</h3><div style="display:flex;gap:4px;flex-wrap:wrap;align-items:flex-end;margin-bottom:8px"><div class="ig" style="flex:1;min-width:80px"><label>Ник</label><input type="text" id="owN"></div><div class="ig" style="flex:2;min-width:100px"><label>Магазин</label><select id="owS"><option value="">—</option></select></div><button class="btn btn-taxi btn-s" onclick="assOwn()">+</button></div><div id="owL"></div></div>
 <div class="asec"><h3>💰 Пополнить</h3><div style="display:flex;gap:4px;flex-wrap:wrap;align-items:flex-end"><div class="ig" style="flex:1;min-width:80px"><label>Ник</label><input type="text" id="adN"></div><div class="ig" style="flex:1;min-width:50px"><label>Сумма</label><input type="number" id="adA" min="1"></div><button class="btn btn-bank btn-s" onclick="adDep()">+</button></div></div>
@@ -258,34 +217,30 @@ header{background:rgba(10,10,10,.95);padding:8px 4%;display:flex;justify-content
 
 <div class="modal h" id="aSM"><div class="mbox"><h3>🏪 Новый магазин</h3>
 <div class="ig"><label>Название</label><input type="text" id="nsN"></div>
-<div class="ig"><label>Иконка (эмодзи или URL)</label><input type="text" id="nsI" placeholder="🏪">
-<input type="file" id="nsIFile" accept="image/*"></div>
-<div class="ig"><label>Обложка URL (или файл)</label><input type="text" id="nsIm" placeholder="https://...">
-<input type="file" id="nsImFile" accept="image/*"></div>
+<div class="ig"><label>Иконка (эмодзи или URL)</label><input type="text" id="nsI" placeholder="🏪"><input type="file" id="nsIFile" accept="image/*"></div>
+<div class="ig"><label>Обложка URL или файл</label><input type="text" id="nsIm"><input type="file" id="nsImFile" accept="image/*"></div>
 <div class="ig"><label>Описание</label><textarea id="nsD" rows="2"></textarea></div>
 <div style="display:flex;gap:4px"><div class="ig" style="flex:1"><label>X</label><input type="number" id="nsX"></div><div class="ig" style="flex:1"><label>Z</label><input type="number" id="nsZ"></div></div>
 <div class="sl">Товары</div><div id="nsIL"></div>
 <button class="btn btn-o btn-s" style="margin-bottom:8px" onclick="aNsI()">+ Товар</button>
 <div style="display:flex;gap:4px"><button class="btn btn-p" style="flex:1" onclick="svShop()">Сохранить</button><button class="btn btn-o" onclick="cls('aSM')">×</button></div>
 </div></div>
-<div class="modal h" id="eSM"><div class="mbox"><h3>✏️ Редактировать</h3><div id="esC"></div></div></div>
-<div class="modal h" id="chatM"><div class="chat-box"><h3 id="chatTitle" style="font-size:14px;border-bottom:1px solid var(--b);padding-bottom:8px;margin-bottom:8px" data-t="chat">💬 Чат</h3><div class="chat-msgs" id="chatList"></div><div style="display:flex;gap:6px"><input type="text" id="chatInput" placeholder="..." style="flex:1;padding:8px;border-radius:6px;border:1px solid var(--b);background:var(--ci);color:white;font-size:12px;outline:none" onkeypress="if(event.key==='Enter')sendChat()"><button class="btn btn-p" onclick="sendChat()">➤</button><button class="btn btn-o" onclick="closeChat()">×</button></div></div></div>
 
-<!-- МОДАЛКА ОТЗЫВОВ -->
-<div class="modal h" id="revM">
-<div class="mbox" style="padding:16px;max-width:420px">
-    <h3 id="revTitle" style="margin-bottom:10px">⭐ Отзывы</h3>
+<div class="modal h" id="eSM"><div class="mbox"><h3>✏️ Редактировать</h3><div id="esC"></div></div></div>
+<div class="modal h" id="chatM"><div class="chat-box"><h3 style="font-size:14px;padding-bottom:8px;border-bottom:1px solid var(--b)">💬 Чат</h3><div class="chat-msgs" id="chatList"></div><div style="display:flex;gap:6px"><input type="text" id="chatInput" placeholder="..." style="flex:1;padding:8px;border-radius:6px;border:1px solid var(--b);background:var(--ci);color:#fff" onkeypress="if(event.key==='Enter')sendChat()"><button class="btn btn-p" onclick="sendChat()">➤</button><button class="btn btn-o" onclick="closeChat()">×</button></div></div></div>
+
+<div class="modal h" id="revM"><div class="mbox" style="padding:16px;max-width:420px">
+    <h3 id="revTitle">⭐ Отзывы</h3>
     <div style="max-height:40vh;overflow-y:auto;background:var(--ci);border-radius:8px;padding:8px;margin-bottom:10px" id="revList"></div>
     <div style="border-top:1px solid var(--b);padding-top:10px">
         <div style="margin-bottom:6px">Оценка: 
             <span class="star-btn" onclick="setRevStar(1)">★</span><span class="star-btn" onclick="setRevStar(2)">★</span><span class="star-btn" onclick="setRevStar(3)">★</span><span class="star-btn" onclick="setRevStar(4)">★</span><span class="star-btn" onclick="setRevStar(5)">★</span>
         </div>
-        <textarea id="revText" rows="2" style="width:100%;padding:8px;border-radius:6px;border:1px solid var(--b);background:var(--c1);color:var(--t);font-size:12px;margin-bottom:6px" placeholder="Напишите отзыв..."></textarea>
+        <textarea id="revText" rows="2" style="width:100%;padding:8px;border-radius:6px;border:1px solid var(--b);background:var(--c1);color:var(--t);font-size:12px;margin-bottom:6px" placeholder="Ваш отзыв..."></textarea>
         <button class="btn btn-del" style="width:100%" onclick="sendReview()">Оставить отзыв</button>
     </div>
     <button class="btn btn-o btn-s" style="width:100%;margin-top:6px" onclick="closeRev()">Закрыть</button>
-</div>
-</div>
+</div></div>
 
 <div class="toast" id="toast"></div>
 // ========== 1. КОНФИГУРАЦИЯ (ОБЪЯВЛЯЕМ ВСЁ СРАЗУ) ==========
@@ -1463,6 +1418,277 @@ window.addEventListener('load', ()=>{
   try{ setLang(curLang); }catch(e){}
   try{ initFirebase(); }catch(e){ console.error(e); hideLoad(); }
   setTimeout(hideLoad, 2000);
+  tryAuto();
+});
+// ========== 9. ВЛАДЕЛЕЦ МАГАЗИНА (МОИ МАГАЗИНЫ) ==========
+function rMyShops(){
+  const myS = dbShops.filter(s => dbOwners[s.docId]?.includes(U.nick));
+  const c = document.getElementById('myShopsL');
+  if(!myS.length){ c.innerHTML = '<p class="m" style="text-align:center">У тебя нет назначенных магазинов</p>'; return; }
+  
+  fdb.collection('reviews').where('type','==','shop').get().then(snap=>{
+      const shopStars = {};
+      snap.forEach(d=>{ const r=d.data(); if(!shopStars[r.targetId]) shopStars[r.targetId]={sum:0,cnt:0}; shopStars[r.targetId].sum+=r.stars; shopStars[r.targetId].cnt++; });
+      
+      c.innerHTML = myS.map((s,i)=>{
+        let starsHtml = '';
+        if(shopStars[s.docId]) {
+           const avg = (shopStars[s.docId].sum / shopStars[s.docId].cnt).toFixed(1);
+           starsHtml = `<div class="rating-badge">⭐ ${avg}</div>`;
+        }
+        return `
+        <div class="card">
+          ${safeImgUrl(s.image) ? `<img class="shop-img" src="${s.image}">` : ''}
+          <h3>${s.icon && !isUrl(s.icon) ? s.icon : '🏪'} ${s.name}</h3>
+          <p class="m">📍 X:${s.x} Z:${s.z} · ${(s.items||[]).length} товаров</p>
+          ${starsHtml}
+          <button class="btn btn-s btn-p" style="width:100%;margin-top:8px" onclick="edSh('${s.docId}')">✏️ Редактировать магазин</button>
+        </div>
+      `}).join('');
+  });
+}
+
+// ========== 10. АДМИНКА (ТОЛЬКО Sasasaco) ==========
+function rAd(){ if(!isAdm()) return; rAdU(); rAdS(); rOw(); rAdP(); rJA(); rAdA(); ldR(); }
+
+function rAdU(){
+  const now = Date.now();
+  const us = Object.values(dbUsers).sort((a,b)=>(b.lastOnline||0) - (a.lastOnline||0));
+  document.getElementById('adUsers').innerHTML = us.length ? us.map(u=>`
+    <div class="user-row">
+      <img src="https://mc-heads.net/avatar/${encodeURIComponent(u.nick)}/20">
+      <span class="online-dot ${(now-(u.lastOnline||0)) < 60000 || isServerOnline(u.nick) ? 'on':'off'}"></span>
+      <strong>${getPref(u)}${u.nick}</strong>
+      ${isServerOnline(u.nick)?'<span class="online-badge">сервер</span>':''}
+      <span style="margin-left:auto;color:var(--tm);font-size:9px">${tAgo(u.lastOnline)}</span>
+      <span style="font-size:9px;color:var(--td)">${u.isDriver?'📦':''} ${u.isTaxiDriver?'🚀':''}</span>
+      <span style="font-size:9px;color:var(--bank);font-weight:700">${bal(u.balance)}</span>
+    </div>
+  `).join('') : '—';
+}
+
+async function setPrefix(){
+  const n = v('pxN'), p = v('pxP');
+  if(!n) return toast('Введи ник!', 1);
+  const uDoc = await fdb.collection('users').doc(n).get();
+  if(!uDoc.exists) return toast('Игрок не найден!', 1);
+  await fdb.collection('users').doc(n).update({ prefix: p });
+  document.getElementById('pxN').value = ''; document.getElementById('pxP').value = '';
+  toast('Префикс ' + (p||'очищен') + ' для ' + n);
+}
+
+function rAdS(){
+  document.getElementById('adS').innerHTML = dbShops.length ? dbShops.map((s,i)=>`
+    <div class="pcard">
+      <strong>${s.icon && !isUrl(s.icon) ? s.icon : '🏪'} ${s.name}</strong>
+      <p class="m">X:${s.x} Z:${s.z} · ${(s.items||[]).length} тов.</p>
+      <div style="display:flex;gap:4px;margin-top:6px">
+        <button class="btn btn-s btn-p" onclick="edSh('${s.docId}')">✏️</button>
+        <button class="btn btn-s btn-danger" onclick="dlSh('${s.docId}')">🗑️</button>
+      </div>
+    </div>
+  `).join('') : '—';
+  const sel = document.getElementById('owS');
+  if(sel) sel.innerHTML = '<option value="">—</option>' + dbShops.map(s=>`<option value="${s.docId}">${s.name}</option>`).join('');
+}
+
+function openAS(){
+  nsIt = []; ['nsN','nsI','nsIm','nsD','nsX','nsZ'].forEach(id=>{ const e=document.getElementById(id); if(e) e.value=''; });
+  rNI(); sh('aSM');
+}
+
+function aNsI(){ nsIt.push({ name:'', icon:'📦', price:1, qty:'' }); rNI(); }
+
+function rNI(){
+  document.getElementById('nsIL').innerHTML = nsIt.map((it,i)=>`
+    <div style="display:flex;gap:4px;margin-bottom:6px;flex-wrap:wrap;align-items:flex-end;border:1px solid var(--b);padding:6px;border-radius:8px">
+      <div class="ig" style="flex:1;min-width:90px"><label>Иконка/URL</label><input value="${(it.icon||'').replace(/"/g,'&quot;')}" onchange="nsIt[${i}].icon=this.value">
+      <input type="file" accept="image/*" onchange="const f=this.files[0];if(f){compressImageFile(f,150).then(b=>{if(b){nsIt[${i}].icon=b;rNI()}})}"></div>
+      <div class="ig" style="flex:2;min-width:90px"><label>Название</label><input value="${(it.name||'').replace(/"/g,'&quot;')}" onchange="nsIt[${i}].name=this.value"></div>
+      <div class="ig" style="width:50px"><label>Цена</label><input type="number" value="${it.price||1}" min="1" onchange="nsIt[${i}].price=+this.value||1"></div>
+      <div class="ig" style="width:50px"><label>Кол-во</label><input type="number" value="${it.qty??''}" placeholder="∞" onchange="nsIt[${i}].qty=this.value===''?undefined:+this.value"></div>
+      <button class="btn btn-danger btn-s" type="button" onclick="nsIt.splice(${i},1);rNI()">×</button>
+    </div>
+  `).join('');
+}
+
+async function svShop(){
+  const n = v('nsN'); if(!n) return toast('Введи название!', 1);
+  let ic = v('nsI')||'🏪'; const fI = document.getElementById('nsIFile')?.files?.[0]; if(fI){ const b = await compressImageFile(fI,200); if(b) ic=b; }
+  let im = v('nsIm'); const fIm = document.getElementById('nsImFile')?.files?.[0]; if(fIm){ const b = await compressImageFile(fIm,500); if(b) im=b; }
+  
+  await fdb.collection('shops').add({
+    name: n, icon: ic, image: safeImgUrl(im), desc: v('nsD'),
+    x: +v('nsX')||0, z: +v('nsZ')||0,
+    items: nsIt.filter(i=>i.name&&i.name.trim()).map(i=>({
+      name: i.name.trim(), icon: i.icon||'📦', price: +i.price||1,
+      qty: (i.qty===undefined||i.qty===''||i.qty===null) ? undefined : +i.qty
+    }))
+  });
+  cls('aSM'); snd('ok'); toast('Магазин добавлен!');
+}
+
+function edSh(idxOrDocId){
+  let s;
+  if(typeof idxOrDocId === 'string'){ s = dbShops.find(x=>x.docId === idxOrDocId); }
+  else { s = dbShops[idxOrDocId]; }
+  if(!s) return;
+  
+  window._edShopDoc = s.docId;
+  window._eit = JSON.parse(JSON.stringify(s.items||[]));
+  document.getElementById('esC').innerHTML = `
+    <div class="ig"><label>Название</label><input id="esN" value="${s.name||''}"></div>
+    <div class="ig"><label>Иконка / URL</label><input id="esI" value="${s.icon||''}"><input type="file" id="esIFile" accept="image/*"></div>
+    <div class="ig"><label>Обложка URL</label><input id="esIm" value="${s.image||''}"><input type="file" id="esImFile" accept="image/*"></div>
+    <div class="ig"><label>Описание</label><textarea id="esD" rows="2">${s.desc||''}</textarea></div>
+    <div style="display:flex;gap:6px"><div class="ig" style="flex:1"><label>X</label><input type="number" id="esX" value="${s.x||0}"></div><div class="ig" style="flex:1"><label>Z</label><input type="number" id="esZ" value="${s.z||0}"></div></div>
+    <div class="sl">Товары</div><div id="esIL"></div>
+    <button class="btn btn-o btn-s" style="margin-bottom:8px" onclick="aEI()">+ Товар</button>
+    <div style="display:flex;gap:4px">
+      <button class="btn btn-p" style="flex:1" onclick="svES()">Сохранить</button>
+      <button class="btn btn-o" onclick="cls('eSM')">Отмена</button>
+    </div>
+  `;
+  rEI(); sh('eSM');
+}
+
+function rEI(){
+  const c = document.getElementById('esIL'); if(!c) return;
+  c.innerHTML = (window._eit||[]).map((it,i)=>`
+    <div style="display:flex;gap:4px;margin-bottom:6px;flex-wrap:wrap;align-items:flex-end;border:1px solid var(--b);padding:6px;border-radius:8px">
+      <div class="ig" style="flex:1;min-width:100px"><label>Иконка/URL</label><input value="${(it.icon||'📦').replace(/"/g,'&quot;')}" onchange="window._eit[${i}].icon=this.value">
+      <input type="file" accept="image/*" onchange="const f=this.files[0];if(f){compressImageFile(f,100).then(b=>{if(b){window._eit[${i}].icon=b;rEI()}})}"></div>
+      <div class="ig" style="flex:2;min-width:90px"><label>Название</label><input value="${(it.name||'').replace(/"/g,'&quot;')}" onchange="window._eit[${i}].name=this.value"></div>
+      <div class="ig" style="width:50px"><label>Цена</label><input type="number" value="${it.price||1}" min="1" onchange="window._eit[${i}].price=+this.value||1"></div>
+      <div class="ig" style="width:50px"><label>Кол-во</label><input type="number" value="${it.qty??''}" placeholder="∞" onchange="window._eit[${i}].qty=this.value===''?undefined:+this.value"></div>
+      <button class="btn btn-danger btn-s" type="button" onclick="window._eit.splice(${i},1);rEI()">×</button>
+    </div>
+  `).join('');
+}
+function aEI(){ window._eit = window._eit||[]; window._eit.push({name:'',icon:'📦',price:1,qty:undefined}); rEI(); }
+
+async function svES(){
+  let ic = v('esI')||'🏪'; const fI = document.getElementById('esIFile')?.files?.[0]; if(fI){ const b = await compressImageFile(fI,200); if(b) ic=b; }
+  let im = v('esIm'); const fIm = document.getElementById('esImFile')?.files?.[0]; if(fIm){ const b = await compressImageFile(fIm,500); if(b) im=b; }
+  
+  await fdb.collection('shops').doc(window._edShopDoc).update({
+    name: v('esN')||'?', icon: ic, image: safeImgUrl(im), desc: v('esD'), x: +v('esX')||0, z: +v('esZ')||0,
+    items: (window._eit||[]).filter(i=>i.name&&i.name.trim()).map(i=>({ name: i.name.trim(), icon: i.icon||'📦', price: +i.price||1, qty: (i.qty===undefined||i.qty===''||i.qty===null) ? undefined : +i.qty }))
+  });
+  cls('eSM'); snd('ok'); toast('Сохранено!');
+}
+
+async function dlSh(docId){ if(!confirm('Удалить магазин?')) return; await fdb.collection('shops').doc(docId).delete(); }
+
+async function assOwn(){
+  const n = v('owN'), sDocId = v('owS'); if(!n || !sDocId) return;
+  const owners = { ...dbOwners }; if(!owners[sDocId]) owners[sDocId] = [];
+  if(!owners[sDocId].includes(n)) owners[sDocId].push(n);
+  await fdb.collection('config').doc('settings').set({ owners }, { merge:true });
+  document.getElementById('owN').value = ''; toast('Владелец назначен!');
+}
+
+function rOw(){
+  const c = document.getElementById('owL'); if(!Object.keys(dbOwners).length){ c.innerHTML = '—'; return; }
+  let h = '';
+  for(let sDocId in dbOwners){
+    const s = dbShops.find(x=>x.docId === sDocId); if(!s) continue;
+    dbOwners[sDocId].forEach(n=>{ h += `<div class="pcard" style="display:flex;justify-content:space-between;align-items:center;padding:6px 10px"><span style="font-size:10px">${s.icon||'🏪'} ${s.name} → <b>${n}</b></span><button class="btn btn-danger btn-s" onclick="rmOw('${sDocId}','${n}')">×</button></div>`; });
+  }
+  c.innerHTML = h || '—';
+}
+
+async function rmOw(sDocId, n){
+  const owners = { ...dbOwners }; if(owners[sDocId]) owners[sDocId] = owners[sDocId].filter(x=>x !== n);
+  await fdb.collection('config').doc('settings').set({ owners }, { merge:true });
+}
+
+async function adDep(){
+  const n = v('adN'), a = parseInt(v('adA')); if(!n || !a) return toast('Заполни поля!', 1);
+  const uDoc = await fdb.collection('users').doc(n).get(); if(!uDoc.exists) return toast('Игрок не найден!', 1);
+  await fdb.collection('users').doc(n).update({ balance: bal(uDoc.data().balance) + a, transactions: firebase.firestore.FieldValue.arrayUnion({ desc: '+Админ', amount: a, date: new Date().toLocaleString('ru') }) });
+  document.getElementById('adN').value = ''; document.getElementById('adA').value = ''; snd('coin'); toast(`+${a} → ${n}`);
+}
+
+async function setTp(){
+  const n = v('ptN'), t = v('ptT'); if(!n) return;
+  const uDoc = await fdb.collection('users').doc(n).get(); if(!uDoc.exists) return toast('Игрок не найден!', 1);
+  await fdb.collection('users').doc(n).update({ type: t }); toast(`${n} → ${t}`);
+}
+
+function rAdP(){
+  const p = dbOrders.filter(o=>o.status === 'pending');
+  document.getElementById('adP').innerHTML = p.length ? p.map(o=>`
+    <div class="pcard">
+      <strong style="font-size:10px">${o.type==='delivery'?'📦':'🚀'} #${o.id} — ${o.user}</strong>
+      <p class="m">${o.total}${cH(10)} · ${o.payment==='cash'?'Нал':'Онлайн'} · ${o.date||''}</p>
+      <div class="acts">
+        <button class="btn btn-s btn-ok" onclick="apOrd('${o.docId}')">✅ Одобрить</button>
+        <button class="btn btn-s btn-danger" onclick="rjOrd('${o.docId}')">❌ Отклонить</button>
+      </div>
+    </div>
+  `).join('') : 'Нет ожидающих заявок ✨';
+}
+
+async function apOrd(docId){ await fdb.collection('orders').doc(docId).update({ status: 'approved' }); toast('✅ Одобрен!'); }
+
+async function rjOrd(docId){
+  const o = dbOrders.find(x=>x.docId === docId); if(!o) return;
+  await fdb.collection('orders').doc(docId).update({ status: 'rejected' });
+  if(o.payment === 'online'){
+    const uDoc = await fdb.collection('users').doc(o.user).get();
+    if(uDoc.exists){
+      await fdb.collection('users').doc(o.user).update({
+        balance: bal(uDoc.data().balance) + o.total,
+        transactions: firebase.firestore.FieldValue.arrayUnion({ desc: `Возврат #${o.id}`, amount: o.total, date: new Date().toLocaleString('ru') })
+      });
+    }
+  }
+  toast('❌ Отклонён (возврат)');
+}
+
+function rJA(){
+  const a = dbJobApps.filter(x=>x.status === 'pending');
+  document.getElementById('adJ').innerHTML = a.length ? a.map(x=>`
+    <div class="pcard">
+      <span style="font-size:10px"><b>${x.nick}</b> → ${x.job==='driver'?'📦 Доставщик':'🚀 Таксист'}</span>
+      <div class="acts">
+        <button class="btn btn-s btn-ok" onclick="apJ('${x.docId}','${x.nick}','${x.job}')">✅</button>
+        <button class="btn btn-s btn-danger" onclick="rjJ('${x.docId}')">❌</button>
+      </div>
+    </div>
+  `).join('') : 'Нет заявок';
+}
+
+async function apJ(docId, nick, job){
+  await fdb.collection('jobApps').doc(docId).update({ status: 'approved' });
+  const updateData = job==='driver' ? { isDriver: true } : { isTaxiDriver: true };
+  await fdb.collection('users').doc(nick).update(updateData);
+  toast(`${nick} принят на работу!`);
+}
+
+async function rjJ(docId){ await fdb.collection('jobApps').doc(docId).update({ status: 'rejected' }); }
+
+function rAdA(){
+  const sl = { pending:'⏳', approved:'✅', accepted:'🔧', delivering:'🚚', waiting_customer:'📦', done:'✓', rejected:'❌' };
+  const sc = { pending:'w', approved:'a', accepted:'t', delivering:'t', waiting_customer:'w', done:'a', rejected:'r' };
+  document.getElementById('adAl').innerHTML = dbOrders.length ? dbOrders.slice(0,30).map(o=>`
+    <div class="pcard">
+      <div style="display:flex;justify-content:space-between"><strong style="font-size:9px">${o.type==='delivery'?'📦':'🚀'} #${o.id} — ${o.user}</strong><span class="sb ${sc[o.status]||'w'}">${sl[o.status]||'?'}</span></div>
+      <p class="m">${o.date||''} · ${o.total}${cH(10)}${o.worker ? ' 👷 '+o.worker : ''}</p>
+    </div>
+  `).join('') : 'Нет заказов';
+}
+
+function ldR(){ const rd = document.getElementById('rtD'), rt = document.getElementById('rtT'); if(rd) rd.value = dbRates.d || 0.05; if(rt) rt.value = dbRates.t || 0.03; }
+async function svRt(){ const rates = { d: parseFloat(v('rtD')) || 0.05, t: parseFloat(v('rtT')) || 0.03 }; await fdb.collection('config').doc('settings').set({ rates }, { merge: true }); toast('Ставки сохранены!'); }
+
+document.addEventListener('click', e=>{ if(e.target.classList.contains('modal') || e.target.classList.contains('profile-overlay')) e.target.classList.add('h'); });
+
+// START
+window.addEventListener('load', ()=>{
+  try{ setLang(curLang); }catch(e){}
+  try{ initFirebase(); }catch(e){ console.error(e); hideLoad(); }
   tryAuto();
 });
 </script>
